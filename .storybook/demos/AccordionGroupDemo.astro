@@ -1,0 +1,53 @@
+---
+// Story-only demo: items sharing `name` open one at a time.
+import Accordion from '../../src/components/Accordion/Accordion.astro';
+
+interface Props {
+  theme: 'dark' | 'light';
+}
+
+const { theme } = Astro.props;
+const items =
+  theme === 'dark'
+    ? [
+        [
+          'Energia Solar Fotovoltaica',
+          'Projeto, dimensionamento e instalação de sistemas fotovoltaicos para residências, comércios e indústrias, proporcionando economia e sustentabilidade.',
+        ],
+        [
+          'Projetos Elétricos',
+          'Desenvolvimento de projetos elétricos de baixa e média tensão, atendendo às normas técnicas vigentes e às exigências das concessionárias.',
+        ],
+        [
+          'Eficiência Energética',
+          'Análise detalhada do consumo de energia com desenvolvimento de soluções para redução de custos e melhoria do desempenho energético.',
+        ],
+      ]
+    : [
+        [
+          'Em quanto tempo o investimento se paga?',
+          'Na maioria dos projetos residenciais o retorno acontece entre 2 a 3 anos e o sistema continua gerando energia por 25 anos.',
+        ],
+        [
+          'Como é feito o pagamento?',
+          'À vista, 18x no cartão ou financiamento com as financeiras (sujeito a análise de crédito).',
+        ],
+        [
+          'Preciso de autorização da concessionária?',
+          'Sim. Nós cuidamos de todo o processo de homologação junto à concessionária e também do projeto elétrico.',
+        ],
+      ];
+---
+
+<div class="w-full max-w-164">
+  {items.map(([title, content], i) => (
+    <Accordion
+      theme={theme}
+      name={`demo-${theme}`}
+      open={i === 0}
+      title={title}
+      content={content}
+      class={theme === 'dark' ? 'last:border-b' : ''}
+    />
+  ))}
+</div>

@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+storybook-static/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# os / editor
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+.vscode/*
+!.vscode/extensions.json
+.idea/

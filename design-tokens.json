@@ -1,0 +1,688 @@
+{
+  "tokens": {
+    "Spacing": {
+      "modes": [
+        "Mode 1"
+      ],
+      "variables": {
+        "Spacing/0": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 0
+          }
+        },
+        "Spacing/half": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 2
+          }
+        },
+        "Spacing/1": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 4
+          }
+        },
+        "Spacing/1-half": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 6
+          }
+        },
+        "Spacing/2": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 8
+          }
+        },
+        "Spacing/3": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 12
+          }
+        },
+        "Spacing/4": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 16
+          }
+        },
+        "Spacing/5": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 20
+          }
+        },
+        "Spacing/6": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 24
+          }
+        },
+        "Spacing/7": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 28
+          }
+        },
+        "Spacing/8": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 32
+          }
+        },
+        "Spacing/9": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 36
+          }
+        },
+        "Spacing/10": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 40
+          }
+        },
+        "Spacing/11": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 44
+          }
+        },
+        "Spacing/12": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 48
+          }
+        },
+        "Spacing/16": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 64
+          }
+        },
+        "Spacing/18": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 72
+          }
+        },
+        "Spacing/20": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 80
+          }
+        }
+      }
+    },
+    "Radius": {
+      "modes": [
+        "Mode 1"
+      ],
+      "variables": {
+        "Radius/None": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 4
+          }
+        },
+        "Radius/Inner": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 6
+          }
+        },
+        "Radius/Element": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 10
+          }
+        },
+        "Radius/Container": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 12
+          }
+        },
+        "Radius/Page": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 28
+          }
+        },
+        "Radius/Full": {
+          "type": "FLOAT",
+          "values": {
+            "Mode 1": 9999
+          }
+        }
+      }
+    },
+    "Color": {
+      "modes": [
+        "Default"
+      ],
+      "variables": {
+        "primitive/yellow/50": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#FDF6EC"
+          }
+        },
+        "primitive/yellow/100": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#F8E3C3"
+          }
+        },
+        "primitive/yellow/200": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#F4D6A6"
+          }
+        },
+        "primitive/yellow/300": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#F0C37D"
+          }
+        },
+        "primitive/yellow/400": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#EDB764"
+          }
+        },
+        "primitive/yellow/500": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#E8A53D"
+          }
+        },
+        "primitive/yellow/600": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#D39638"
+          }
+        },
+        "primitive/yellow/700": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#A5752B"
+          }
+        },
+        "primitive/yellow/800": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#805B22"
+          }
+        },
+        "primitive/yellow/900": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#61451A"
+          }
+        },
+        "primitive/navy/50": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#E8F0F4"
+          }
+        },
+        "primitive/navy/100": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#B7CFDE"
+          }
+        },
+        "primitive/navy/200": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#94B8CD"
+          }
+        },
+        "primitive/navy/300": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#6498B7"
+          }
+        },
+        "primitive/navy/400": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#4584A9"
+          }
+        },
+        "primitive/navy/500": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#176593"
+          }
+        },
+        "primitive/navy/600": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#155C86"
+          }
+        },
+        "primitive/navy/700": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#104868"
+          }
+        },
+        "primitive/navy/800": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#0D3851"
+          }
+        },
+        "primitive/navy/900": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#0A2A3E"
+          }
+        },
+        "primitive/white": {
+          "type": "COLOR",
+          "values": {
+            "Default": "#FFFFFF"
+          }
+        },
+        "bg/page": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/white"
+            }
+          }
+        },
+        "bg/subtle": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/50"
+            }
+          }
+        },
+        "bg/warm": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/50"
+            }
+          },
+          "description": "Fundo da se\u00e7\u00e3o Depoimentos."
+        },
+        "bg/inverse": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          }
+        },
+        "bg/accent-subtle": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/100"
+            }
+          },
+          "description": "Avatar inativo nos depoimentos."
+        },
+        "text/primary": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          }
+        },
+        "text/secondary": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/700"
+            }
+          }
+        },
+        "text/inverse": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/white"
+            }
+          }
+        },
+        "text/inverse-emphasis": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/50"
+            }
+          },
+          "description": "T\u00edtulo do item aberto no accordion escuro."
+        },
+        "text/inverse-muted": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/100"
+            }
+          },
+          "description": "Texto de apoio sobre fundo escuro."
+        },
+        "text/accent": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/600"
+            }
+          }
+        },
+        "text/on-accent-subtle": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/800"
+            }
+          }
+        },
+        "icon/primary": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          }
+        },
+        "icon/accent": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/600"
+            }
+          }
+        },
+        "icon/on-photo": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/400"
+            }
+          },
+          "description": "\u00cdcones dentro do Badge sobre fotos."
+        },
+        "icon/inverse": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/white"
+            }
+          }
+        },
+        "action/primary": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/500"
+            }
+          }
+        },
+        "action/primary-hover": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/yellow/600"
+            }
+          }
+        },
+        "action/secondary-hover": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/50"
+            }
+          }
+        },
+        "action/on-primary": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          },
+          "description": "Texto e \u00edcone sobre o amarelo do bot\u00e3o prim\u00e1rio."
+        },
+        "border/strong": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          }
+        },
+        "border/subtle": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/navy/900"
+            }
+          },
+          "description": "Usada com opacidade 12\u201325% em divis\u00f3rias e bordas de bot\u00f5es secund\u00e1rios."
+        },
+        "border/inverse": {
+          "type": "COLOR",
+          "values": {
+            "Default": {
+              "alias": "primitive/white"
+            }
+          },
+          "description": "Usada com opacidade 28\u201340% em bordas sobre fundo escuro/foto."
+        }
+      }
+    },
+    "Layout": {
+      "modes": [
+        "Desktop",
+        "Tablet",
+        "Mobile"
+      ],
+      "variables": {
+        "container/width": {
+          "type": "FLOAT",
+          "values": {
+            "Desktop": 1136,
+            "Tablet": 660,
+            "Mobile": 344
+          },
+          "description": "Largura do container de conte\u00fado. A margem lateral vem do container centralizado, n\u00e3o de padding na se\u00e7\u00e3o. Igual \u00e0 soma das colunas do grid."
+        },
+        "footer/content-width": {
+          "type": "FLOAT",
+          "values": {
+            "Desktop": 1136,
+            "Tablet": 660,
+            "Mobile": 311
+          },
+          "description": "Largura do conte\u00fado dentro do card do footer. No mobile deixa 24px de respiro dentro do card."
+        },
+        "section/padding-y": {
+          "type": "FLOAT",
+          "values": {
+            "Desktop": {
+              "alias": "Spacing/20"
+            },
+            "Tablet": {
+              "alias": "Spacing/16"
+            },
+            "Mobile": {
+              "alias": "Spacing/12"
+            }
+          },
+          "description": "Padding vertical das se\u00e7\u00f5es (80/64/48)."
+        },
+        "section/gap": {
+          "type": "FLOAT",
+          "values": {
+            "Desktop": {
+              "alias": "Spacing/12"
+            },
+            "Tablet": {
+              "alias": "Spacing/10"
+            },
+            "Mobile": {
+              "alias": "Spacing/8"
+            }
+          },
+          "description": "Espa\u00e7o entre o cabe\u00e7alho e o corpo dentro do container (48/40/32)."
+        }
+      }
+    }
+  },
+  "typography": {
+    "heading/h1": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 64,
+      "lineHeight": "115%",
+      "letterSpacing": "-3%"
+    },
+    "heading/h2": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 56,
+      "lineHeight": "115%",
+      "letterSpacing": "-3%"
+    },
+    "heading/h3": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 48,
+      "lineHeight": "115%",
+      "letterSpacing": "-3%"
+    },
+    "heading/h4": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 40,
+      "lineHeight": "115%",
+      "letterSpacing": "0%"
+    },
+    "heading/h5": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 32,
+      "lineHeight": "125%",
+      "letterSpacing": "0%"
+    },
+    "heading/h5-medium": {
+      "fontFamily": "Inter",
+      "fontWeight": "Medium",
+      "fontSize": 32,
+      "lineHeight": "125%",
+      "letterSpacing": "0%"
+    },
+    "heading/h6": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 24,
+      "lineHeight": "125%",
+      "letterSpacing": "0%"
+    },
+    "heading/h6-medium": {
+      "fontFamily": "Inter",
+      "fontWeight": "Medium",
+      "fontSize": 24,
+      "lineHeight": "125%",
+      "letterSpacing": "0%"
+    },
+    "body/large": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 18,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/large-regular": {
+      "fontFamily": "Inter",
+      "fontWeight": "Regular",
+      "fontSize": 18,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/base": {
+      "fontFamily": "Inter",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/base-medium": {
+      "fontFamily": "Inter",
+      "fontWeight": "Medium",
+      "fontSize": 16,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/base-semibold": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 16,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/small": {
+      "fontFamily": "Inter",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/small-medium": {
+      "fontFamily": "Inter",
+      "fontWeight": "Medium",
+      "fontSize": 14,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/small-semibold": {
+      "fontFamily": "Inter",
+      "fontWeight": "Semi Bold",
+      "fontSize": 14,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    },
+    "body/legal": {
+      "fontFamily": "Inter",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "lineHeight": "150%",
+      "letterSpacing": "0%"
+    }
+  },
+  "grids": {
+    "Layout (Desktop)": {
+      "frameWidth": 1440,
+      "columns": 12,
+      "columnWidth": 80,
+      "gutter": 16,
+      "alignment": "CENTER"
+    },
+    "Layout (Tablet)": {
+      "frameWidth": 768,
+      "columns": 8,
+      "columnWidth": 72,
+      "gutter": 12,
+      "alignment": "CENTER"
+    },
+    "Layout (Mobile)": {
+      "frameWidth": 375,
+      "columns": 4,
+      "columnWidth": 80,
+      "gutter": 8,
+      "alignment": "CENTER"
+    }
+  }
+}

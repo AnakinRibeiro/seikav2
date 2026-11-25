@@ -125,7 +125,9 @@ No tablet, todos os componentes usam a variante Desktop esticada.
 
 ## 6. Pendências
 
-- **Overlay do menu** (tablet e mobile) ainda não foi desenhado.
+- **Overlay do menu** (tablet e mobile): proposta implementada direto no código (`src/components/SiteNav/SiteNav.astro`): `<dialog>` modal em tela cheia sobre `bg/inverse`, links em `heading/h5`, WhatsApp primário embaixo. Falta replicar no Figma depois da validação.
+- **Cores sem token semântico:** o título da hero usa `primitive/yellow/500` como texto e o link "Ver depoimentos" usa `primitive/yellow/300`. O código segue o Figma e usa as primitivas; vale criar tokens como `text/accent-inverse`.
+- **Foto da hero:** o arquivo original no Figma tem 1195×614 e é ampliado no desktop (1440×860). Uma versão em maior resolução melhora a nitidez.
 - **Estados desabilitados** não foram desenhados.
 
 Decisões tomadas (2026-11-25):

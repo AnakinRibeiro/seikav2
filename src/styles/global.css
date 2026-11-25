@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+
+/*
+ * Seika theme — mirrors the Figma file "Seika V2" (see DESIGN.md and design-tokens.json).
+ * Only semantic tokens become utilities; primitives exist solely as alias sources.
+ */
+
+:root {
+  /* Color primitives (Figma collection Color → primitive/*). Do not use directly in components. */
+  --primitive-yellow-50: #fdf6ec;
+  --primitive-yellow-100: #f8e3c3;
+  --primitive-yellow-200: #f4d6a6;
+  --primitive-yellow-300: #f0c37d;
+  --primitive-yellow-400: #edb764;
+  --primitive-yellow-500: #e8a53d;
+  --primitive-yellow-600: #d39638;
+  --primitive-yellow-700: #a5752b;
+  --primitive-yellow-800: #805b22;
+  --primitive-yellow-900: #61451a;
+  --primitive-navy-50: #e8f0f4;
+  --primitive-navy-100: #b7cfde;
+  --primitive-navy-200: #94b8cd;
+  --primitive-navy-300: #6498b7;
+  --primitive-navy-400: #4584a9;
+  --primitive-navy-500: #176593;
+  --primitive-navy-600: #155c86;
+  --primitive-navy-700: #104868;
+  --primitive-navy-800: #0d3851;
+  --primitive-navy-900: #0a2a3e;
+  --primitive-white: #ffffff;
+}
+
+@theme {
+  /* Drop Tailwind's default palette, radii, type scale and breakpoints: only Figma tokens exist. */
+  --color-*: initial;
+  --radius-*: initial;
+  --text-*: initial;
+  --breakpoint-*: initial;
+  --font-*: initial;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing: Figma Spacing/N = N × 4px, so p-4 = Spacing/4 = 16px, p-0.5 = Spacing/half. */
+  --spacing: 4px;
+
+  /* Breakpoints: Figma frames Tablet (768) and Desktop (1440). Desktop layout starts at 1024. */
+  --breakpoint-tablet: 48rem;
+  --breakpoint-desktop: 64rem;
+
+  /* Radius (Figma collection Radius). Figma "None" is 4px, renamed to avoid clashing with rounded-none. */
+  --radius-base: 4px;
+  --radius-inner: 6px;
+  --radius-element: 10px;
+  --radius-container: 12px;
+  --radius-page: 28px;
+  --radius-full: 9999px;
+}
+
+@theme static {
+  /* Semantic colors (Figma collection Color). Opacity is applied at use site, e.g. border-border-subtle/12. */
+  --color-bg-page: var(--primitive-white);
+  --color-bg-subtle: var(--primitive-navy-50);
+  --color-bg-warm: var(--primitive-yellow-50);
+  --color-bg-inverse: var(--primitive-navy-900);
+  --color-bg-accent-subtle: var(--primitive-yellow-100);
+
+  --color-text-primary: var(--primitive-navy-900);
+  --color-text-secondary: var(--primitive-navy-700);
+  --color-text-inverse: var(--primitive-white);
+  --color-text-inverse-emphasis: var(--primitive-yellow-50);
+  --color-text-inverse-muted: var(--primitive-navy-100);
+  --color-text-accent: var(--primitive-yellow-600);
+  --color-text-on-accent-subtle: var(--primitive-yellow-800);
+
+  --color-icon-primary: var(--primitive-navy-900);
+  --color-icon-accent: var(--primitive-yellow-600);
+  --color-icon-on-photo: var(--primitive-yellow-400);
+  --color-icon-inverse: var(--primitive-white);
+
+  --color-action-primary: var(--primitive-yellow-500);
+  --color-action-primary-hover: var(--primitive-yellow-600);
+  --color-action-secondary-hover: var(--primitive-navy-50);
+  --color-action-on-primary: var(--primitive-navy-900);
+
+  --color-border-strong: var(--primitive-navy-900);
+  --color-border-subtle: var(--primitive-navy-900);
+  --color-border-inverse: var(--primitive-white);
+}
+
+@theme {
+  /* Text styles (Figma text styles heading/* and body/*). Usage: text-h1, text-body-base-medium… */
+  --text-h1: 4rem;
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 600;
+  --text-h2: 3.5rem;
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h2--font-weight: 600;
+  --text-h3: 3rem;
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.03em;
+  --text-h3--font-weight: 600;
+  --text-h4: 2.5rem;
+  --text-h4--line-height: 1.15;
+  --text-h4--font-weight: 600;
+  --text-h5: 2rem;
+  --text-h5--line-height: 1.25;
+  --text-h5--font-weight: 600;
+  --text-h5-medium: 2rem;
+  --text-h5-medium--line-height: 1.25;
+  --text-h5-medium--font-weight: 500;
+  --text-h6: 1.5rem;
+  --text-h6--line-height: 1.25;
+  --text-h6--font-weight: 600;
+  --text-h6-medium: 1.5rem;
+  --text-h6-medium--line-height: 1.25;
+  --text-h6-medium--font-weight: 500;
+
+  --text-body-large: 1.125rem;
+  --text-body-large--line-height: 1.5;
+  --text-body-large--font-weight: 600;
+  --text-body-large-regular: 1.125rem;
+  --text-body-large-regular--line-height: 1.5;
+  --text-body-large-regular--font-weight: 400;
+  --text-body-base: 1rem;
+  --text-body-base--line-height: 1.5;
+  --text-body-base--font-weight: 400;
+  --text-body-base-medium: 1rem;
+  --text-body-base-medium--line-height: 1.5;
+  --text-body-base-medium--font-weight: 500;
+  --text-body-base-semibold: 1rem;
+  --text-body-base-semibold--line-height: 1.5;
+  --text-body-base-semibold--font-weight: 600;
+  --text-body-small: 0.875rem;
+  --text-body-small--line-height: 1.5;
+  --text-body-small--font-weight: 400;
+  --text-body-small-medium: 0.875rem;
+  --text-body-small-medium--line-height: 1.5;
+  --text-body-small-medium--font-weight: 500;
+  --text-body-small-semibold: 0.875rem;
+  --text-body-small-semibold--line-height: 1.5;
+  --text-body-small-semibold--font-weight: 600;
+  --text-body-legal: 0.75rem;
+  --text-body-legal--line-height: 1.5;
+  --text-body-legal--font-weight: 400;
+
+  /* Layout (Figma collection Layout, mode Mobile). Tablet/Desktop values are set in @layer base below. */
+  --container-page: 344px;
+  --container-footer: 311px;
+  --spacing-section-y: 48px;
+  --spacing-section-gap: 32px;
+
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: ease-out;
+}
+
+@layer base {
+  :root {
+    @variant tablet {
+      --container-page: 660px;
+      --container-footer: 660px;
+      --spacing-section-y: 64px;
+      --spacing-section-gap: 40px;
+    }
+    @variant desktop {
+      --container-page: 1136px;
+      --container-footer: 1136px;
+      --spacing-section-y: 80px;
+      --spacing-section-gap: 48px;
+    }
+  }
+
+  html {
+    @apply bg-bg-page font-sans text-body-base text-text-primary antialiased;
+  }
+
+  /* Focus state not designed in Figma: 2px action/primary ring with 2px offset (decision 2026-11-25). */
+  :focus-visible {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Section content container: fixed Figma width, centered, never closer than 16px to the viewport edge. */
+@utility container-page {
+  width: min(var(--container-page), 100% - 32px);
+  margin-inline: auto;
+}
+
+@utility container-footer {
+  width: min(var(--container-footer), 100% - 48px);
+  margin-inline: auto;
+}

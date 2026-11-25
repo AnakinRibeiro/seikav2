@@ -1,0 +1,145 @@
+---
+/**
+ * Navegação sobre a hero (Figma: Nav).
+ * - Desktop: logo, 6 links-âncora e WhatsApp.
+ * - Tablet: logo, WhatsApp e botão de menu. Mobile: logo e botão de menu.
+ * O menu aberto (tablet/mobile) não foi desenhado no Figma: é um <dialog> modal em tela cheia
+ * sobre bg/inverse, feito só com tokens e componentes existentes (decisão de 2026-11-25).
+ */
+import { Image } from 'astro:assets';
+import logo from '../../assets/images/logo.png';
+import { navLinks, whatsapp } from '../../config/site';
+import Button from '../Button/Button.astro';
+import Icon from '../Icon/Icon.astro';
+import IconButton from '../IconButton/IconButton.astro';
+
+// The logo PNG is square with padding; this crop matches the Figma Logo frame (144×62).
+const logoClass = 'h-12 w-28 object-cover object-[50%_45.5%] tablet:h-15.5 tablet:w-36';
+---
+
+<header class="container-page relative flex items-center justify-between">
+  <a href="#inicio" class="shrink-0" aria-label="SEIKA Engenharia — início">
+    <Image src={logo} alt="" width={288} class={logoClass} loading="eager" />
+  </a>
+
+  <nav aria-label="Principal" class="hidden desktop:block">
+    <ul class="flex items-center gap-8 text-body-base-medium">
+      {navLinks.map((link, i) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'transition-colors hover:text-text-inverse',
+              i === 0 ? 'text-text-inverse' : 'text-text-inverse/80',
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="flex items-center gap-2">
+    <!-- The wrapper owns visibility: Button's own inline-flex would override `hidden`. -->
+    <div class="hidden tablet:block">
+      <Button
+        text="Falar no WhatsApp"
+        variant="secondary-inverse"
+        icon={false}
+        href={whatsapp.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    </div>
+    <IconButton
+      icon="menu"
+      label="Abrir menu"
+      variant="secondary-inverse"
+      class="desktop:hidden"
+      aria-haspopup="dialog"
+      aria-controls="site-menu"
+      aria-expanded="false"
+      data-menu-open
+    />
+  </div>
+</header>
+
+<dialog
+  id="site-menu"
+  aria-label="Menu"
+  class="m-0 h-dvh max-h-none w-full max-w-none flex-col bg-bg-inverse pt-6 pb-10 text-text-inverse backdrop:bg-transparent open:flex"
+>
+  <div class="container-page flex items-center justify-between">
+    <a href="#inicio" aria-label="SEIKA Engenharia — início">
+      <Image src={logo} alt="" width={288} class={logoClass} />
+    </a>
+    <IconButton
+      icon="plus"
+      label="Fechar menu"
+      variant="secondary-inverse"
+      class="rotate-45"
+      data-menu-close
+    />
+  </div>
+
+  <nav aria-label="Menu" class="container-page mt-12 flex-1">
+    <ul>
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="flex items-center justify-between border-b border-border-inverse/14 py-4 text-h5 text-text-inverse-emphasis transition-colors hover:text-text-inverse"
+          >
+            {link.label}
+            <Icon name="arrow-right" size={24} class="text-icon-accent" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="container-page mt-8">
+    <Button
+      text="Falar no WhatsApp"
+      icon="chat"
+      href={whatsapp.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="w-full"
+    />
+  </div>
+</dialog>
+
+<script>
+  const menu = document.querySelector<HTMLDialogElement>('#site-menu');
+  const opener = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+
+  if (menu && opener) {
+    opener.addEventListener('click', () => {
+      menu.showModal();
+      // Start on the close button instead of the logo link.
+      menu.querySelector<HTMLButtonElement>('[data-menu-close]')?.focus();
+      opener.setAttribute('aria-expanded', 'true');
+    });
+    const close = () => {
+      menu.close();
+      opener.setAttribute('aria-expanded', 'false');
+    };
+    // Esc closes the dialog natively; keep aria-expanded in sync then too.
+    menu.addEventListener('close', () => opener.setAttribute('aria-expanded', 'false'));
+    // Close on the X and after choosing a link, so the page scrolls to the section.
+    menu
+      .querySelectorAll('[data-menu-close], a')
+      .forEach((el) => el.addEventListener('click', close));
+    // Desktop shows the inline links; never leave the modal open after resizing up.
+    matchMedia('(width >= 64rem)').addEventListener('change', (e) => e.matches && close());
+  }
+</script>
+
+<style is:global>
+  /* Keep the page from scrolling behind the open menu. */
+  :root:has(#site-menu[open]) {
+    overflow: hidden;
+  }
+</style>

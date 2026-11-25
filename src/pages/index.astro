@@ -1,102 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Temporary theme preview: replaced by the real sections in phase 6.
-const colors = [
-  'bg-page',
-  'bg-subtle',
-  'bg-warm',
-  'bg-inverse',
-  'bg-accent-subtle',
-  'text-primary',
-  'text-secondary',
-  'text-accent',
-  'text-on-accent-subtle',
-  'text-inverse-emphasis',
-  'text-inverse-muted',
-  'icon-on-photo',
-  'action-primary',
-  'action-primary-hover',
-  'action-secondary-hover',
-];
-const textStyles = [
-  'text-h1',
-  'text-h2',
-  'text-h3',
-  'text-h4',
-  'text-h5',
-  'text-h5-medium',
-  'text-h6',
-  'text-h6-medium',
-  'text-body-large',
-  'text-body-large-regular',
-  'text-body-base',
-  'text-body-base-medium',
-  'text-body-base-semibold',
-  'text-body-small',
-  'text-body-small-medium',
-  'text-body-small-semibold',
-  'text-body-legal',
-];
-const radii = [
-  'rounded-base',
-  'rounded-inner',
-  'rounded-element',
-  'rounded-container',
-  'rounded-page',
-  'rounded-full',
-];
+import Hero from '../sections/Hero.astro';
 ---
 
 <Layout
-  title="SEIKA Engenharia — tema"
-  description="Prévia do tema da landing page SEIKA Engenharia."
+  title="SEIKA Engenharia — Engenharia elétrica e energia solar"
+  description="Soluções completas em engenharia elétrica e energia solar para residências e empresas. Projetos sob responsabilidade técnica do Eng. Adriano J. Gorges (CREA-PR 206130/D)."
 >
-  <main class="py-section-y">
-    <div class="container-page flex flex-col gap-section-gap">
-      <h1 class="text-h4 desktop:text-h2">Tema Seika</h1>
-
-      <section class="flex flex-col gap-4">
-        <h2 class="text-h6">Cores semânticas</h2>
-        <ul class="grid grid-cols-2 gap-4 tablet:grid-cols-4 desktop:grid-cols-5">
-          {colors.map((c) => (
-            <li class="flex flex-col gap-2">
-              <span
-                class="h-16 rounded-element border border-border-subtle/12"
-                style={`background: var(--color-${c})`}
-              />
-              <code class="text-body-small">{c}</code>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="flex flex-col gap-4">
-        <h2 class="text-h6">Text styles</h2>
-        {textStyles.map((t) => (
-          <p class={t}>{t} — Engenharia elétrica e energia solar</p>
-        ))}
-      </section>
-
-      <section class="flex flex-col gap-4">
-        <h2 class="text-h6">Radius</h2>
-        <ul class="flex flex-wrap gap-4">
-          {radii.map((r) => (
-            <li
-              class={`flex size-24 items-center justify-center bg-bg-subtle text-body-small ${r}`}
-            >
-              {r}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="rounded-container bg-bg-inverse p-8 text-text-inverse">
-        <p class="text-body-large">
-          Container: <code class="text-text-inverse-muted">--container-page</code> muda por
-          breakpoint.
-        </p>
-      </section>
-    </div>
+  <main>
+    <Hero />
   </main>
 </Layout>

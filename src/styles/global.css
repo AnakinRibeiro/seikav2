@@ -176,6 +176,13 @@
     @apply bg-bg-page font-sans text-body-base text-text-primary antialiased;
   }
 
+  /* Nav links are in-page anchors (Figma annotation: smooth scroll). */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   /* Focus state not designed in Figma: 2px action/primary ring with 2px offset (decision 2026-11-25). */
   :focus-visible {
     outline: 2px solid var(--color-action-primary);

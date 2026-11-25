@@ -1,0 +1,110 @@
+---
+/**
+ * Hero (Figma: "Hero — foto full-bleed + card de avaliação em vidro").
+ * Desktop 860px de altura, texto e card lado a lado; tablet 1024px, empilhado;
+ * mobile com altura do conteúdo e botões em largura total.
+ */
+import { Picture } from 'astro:assets';
+import heroImage from '../assets/images/hero.png';
+import Badge from '../components/Badge/Badge.astro';
+import Button from '../components/Button/Button.astro';
+import Icon from '../components/Icon/Icon.astro';
+import Rating from '../components/Rating/Rating.astro';
+import SiteNav from '../components/SiteNav/SiteNav.astro';
+import { whatsapp } from '../config/site';
+---
+
+<section
+  id="inicio"
+  class="relative isolate flex flex-col items-center gap-20 pt-6 pb-10 tablet:min-h-256 tablet:justify-between tablet:pb-12 desktop:min-h-215 desktop:gap-0 desktop:pb-16"
+>
+  <div aria-hidden="true" class="absolute inset-0 -z-10">
+    <Picture
+      src={heroImage}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1195]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="size-full object-cover"
+    />
+    <div class="hero-overlay absolute inset-0"></div>
+  </div>
+
+  <SiteNav />
+
+  <div class="container-page flex flex-col gap-8 tablet:gap-10 desktop:flex-row desktop:items-end desktop:justify-between">
+    <div class="flex flex-col gap-8 desktop:w-164">
+      <div class="flex flex-col gap-6">
+        <div class="flex flex-col items-start gap-4">
+          <Badge
+            text="Responsável técnico: Eng. Adriano J. Gorges · CREA-PR 206130/D"
+            icon="shield"
+          />
+          <h1 class="text-h4 text-text-inverse-emphasis tablet:text-h3 desktop:text-h1">
+            <!-- Line breaks follow Figma: "…elétrica / e energia solar" from tablet up, "…elétrica e / energia solar" on mobile. -->
+            Engenharia elétrica
+            <br class="hidden tablet:inline" />
+            {' e '}
+            <br class="tablet:hidden" />
+            <span class="text-(--primitive-yellow-500)">energia solar</span>
+          </h1>
+        </div>
+        <p class="text-body-base text-text-inverse/85 tablet:text-body-large-regular desktop:w-130">
+          Soluções completas em engenharia elétrica e energia solar para residências e empresas.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 tablet:flex-row">
+        <Button
+          text="Simular minha economia"
+          href={whatsapp.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full tablet:w-auto"
+        />
+        <Button
+          text="Ver todos os serviços"
+          variant="secondary-inverse"
+          icon={false}
+          href="#servicos"
+          class="w-full tablet:w-auto"
+        />
+      </div>
+    </div>
+
+    <figure class="flex flex-col gap-4 rounded-container bg-bg-inverse/40 p-6 inset-ring inset-ring-border-inverse/20 backdrop-blur-[7px] desktop:w-92">
+      <Rating size="P" />
+      <blockquote class="text-body-base-medium text-text-inverse">
+        <p>
+          “Precisávamos de previsibilidade de custo. Fizeram o estudo, cuidaram da homologação e
+          ainda ajustaram o cronograma para não parar a produção.”
+        </p>
+      </blockquote>
+      <figcaption class="flex flex-col gap-2 tablet:flex-row tablet:items-center tablet:justify-between">
+        <span class="text-body-small text-text-inverse/75">Marcos · Cliente comercial</span>
+        <a
+          href="#depoimentos"
+          class="inline-flex items-center gap-1 text-body-small-semibold text-(--primitive-yellow-300) hover:underline"
+        >
+          Ver depoimentos
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  /* Figma overlay: navy at 67% → 0% → 15% → 98%, top to bottom. */
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-inverse) 67%, transparent) 2.44%,
+      color-mix(in srgb, var(--color-bg-inverse) 0%, transparent) 26.38%,
+      color-mix(in srgb, var(--color-bg-inverse) 15%, transparent) 52.28%,
+      color-mix(in srgb, var(--color-bg-inverse) 98%, transparent) 100%
+    );
+  }
+</style>

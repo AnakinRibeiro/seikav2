@@ -1,0 +1,54 @@
+---
+/**
+ * Ícone da biblioteca do Figma (icon/*, 24×24, traço 1.75 arredondado).
+ * A cor vem de `currentColor`: aplique um token de texto/ícone na classe (ex.: `text-icon-accent`).
+ * O tamanho escala o traço junto, como no Figma.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+const icons = import.meta.glob<{ default: (props: Record<string, unknown>) => unknown }>(
+  '../../assets/icons/*.svg',
+  { eager: true },
+);
+
+export type IconName =
+  | 'arrow-left'
+  | 'arrow-right'
+  | 'arrow-up-right'
+  | 'award'
+  | 'chat'
+  | 'facebook'
+  | 'help'
+  | 'home'
+  | 'image'
+  | 'instagram'
+  | 'leaf'
+  | 'linkedin'
+  | 'mail'
+  | 'menu'
+  | 'minus'
+  | 'pin'
+  | 'plus'
+  | 'shield'
+  | 'star'
+  | 'sun'
+  | 'trend-down'
+  | 'wrench'
+  | 'zap';
+
+export interface Props extends Omit<HTMLAttributes<'svg'>, 'width' | 'height'> {
+  name: IconName;
+  /** Lado em px. Padrão 24 (tamanho do componente no Figma). */
+  size?: number;
+  /** Texto para leitores de tela. Sem ele, o ícone é decorativo (aria-hidden). */
+  label?: string;
+}
+
+const { name, size = 24, label, ...rest } = Astro.props;
+const Svg = icons[`../../assets/icons/${name}.svg`]?.default;
+if (!Svg) throw new Error(`Icon "${name}" não existe em src/assets/icons.`);
+
+const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' };
+---
+
+<Svg width={size} height={size} focusable="false" {...a11y} {...rest} />

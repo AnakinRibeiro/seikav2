@@ -1,0 +1,62 @@
+---
+/**
+ * Aba de navegação dos depoimentos (Figma: Tab depoimento): avatar com iniciais, nome e tipo
+ * de cliente, com linha no topo. O estado vem de `aria-selected`, então a seção só troca esse
+ * atributo:
+ * - ativa: linha de 2px em icon/accent e avatar amarelo;
+ * - inativa: linha navy 15%, texto atenuado; hover: linha 40% e nome em cor cheia.
+ * Mobile: avatar de 40px em cima e só o nome, centralizado. Tablet em diante: variante Desktop.
+ * A linha é um inset shadow, então a espessura não muda a altura.
+ */
+export interface Props {
+  initials: string;
+  name: string;
+  description: string;
+  selected?: boolean;
+  /** id do painel controlado (aria-controls). */
+  controls?: string;
+  id?: string;
+  class?: string;
+}
+
+const {
+  initials,
+  name,
+  description,
+  selected = false,
+  controls,
+  id,
+  class: className,
+} = Astro.props;
+---
+
+<button
+  type="button"
+  role="tab"
+  id={id}
+  aria-selected={selected ? 'true' : 'false'}
+  aria-controls={controls}
+  tabindex={selected ? 0 : -1}
+  class:list={[
+    'group flex w-full cursor-pointer flex-col items-center gap-2 pt-4 text-center transition-shadow',
+    'inset-shadow-[0_1px_0] inset-shadow-border-subtle/15 hover:inset-shadow-border-subtle/40',
+    'aria-selected:inset-shadow-[0_2px_0] aria-selected:inset-shadow-icon-accent',
+    'tablet:flex-row tablet:gap-3 tablet:pt-5 tablet:text-left',
+    className,
+  ]}
+>
+  <span
+    aria-hidden="true"
+    class="flex size-10 shrink-0 items-center justify-center rounded-full bg-bg-accent-subtle text-body-small-semibold text-text-on-accent-subtle group-aria-selected:bg-action-primary group-aria-selected:text-text-primary tablet:size-11"
+  >
+    {initials}
+  </span>
+  <span class="flex flex-col gap-0.5">
+    <span class="text-body-small-semibold text-text-primary/60 group-hover:text-text-primary group-aria-selected:text-text-primary tablet:text-body-base-semibold">
+      {name}
+    </span>
+    <span class="hidden text-body-small text-text-secondary/70 group-aria-selected:text-text-secondary tablet:block">
+      {description}
+    </span>
+  </span>
+</button>

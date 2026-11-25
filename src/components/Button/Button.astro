@@ -1,0 +1,57 @@
+---
+/**
+ * Botão padrão (Figma: Botão). Altura fixa de 48px; a borda é desenhada por dentro
+ * (inset ring), então botões com e sem borda têm a mesma altura.
+ * - primary: CTA principal (amarelo).
+ * - secondary: ação de apoio em fundo claro.
+ * - secondary-inverse: ação de apoio sobre fundo escuro ou foto.
+ * Com `href` vira link (`<a>`); sem `href`, `<button>`.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from '../Icon/Icon.astro';
+
+type Variant = 'primary' | 'secondary' | 'secondary-inverse';
+
+export interface Props {
+  text: string;
+  variant?: Variant;
+  /** Ícone à direita do texto (Figma: Ícone/troca). `false` remove. */
+  icon?: Extract<IconName, 'arrow-right' | 'arrow-up-right' | 'chat'> | false;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  target?: HTMLAttributes<'a'>['target'];
+  rel?: string;
+}
+
+const {
+  text,
+  variant = 'primary',
+  icon = 'arrow-right',
+  href,
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const variants: Record<Variant, string> = {
+  primary: 'bg-action-primary text-action-on-primary hover:bg-action-primary-hover',
+  secondary:
+    'text-text-primary inset-ring inset-ring-border-subtle/40 hover:bg-action-secondary-hover hover:inset-ring-border-strong',
+  'secondary-inverse':
+    'text-text-inverse inset-ring inset-ring-border-inverse/40 hover:bg-bg-page/10 hover:inset-ring-border-inverse',
+};
+
+const classes = [
+  'inline-flex items-center justify-center gap-2 rounded-element px-6 py-3 text-body-base-semibold whitespace-nowrap transition-colors',
+  variants[variant],
+  className,
+];
+const Tag = href ? 'a' : 'button';
+const tagProps = href ? { href, ...rest } : { type };
+---
+
+<Tag class:list={classes} {...tagProps}>
+  {text}
+  {icon && <Icon name={icon} size={20} />}
+</Tag>

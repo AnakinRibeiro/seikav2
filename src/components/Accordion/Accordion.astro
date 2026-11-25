@@ -1,0 +1,93 @@
+---
+/**
+ * Item de accordion (Figma: Accordion), feito com <details>/<summary> nativos.
+ * Itens com o mesmo `name` formam um grupo exclusivo: abrir um fecha os outros, sem JavaScript.
+ * - dark (Escuro): lista de Serviços sobre fundo navy, linha no topo, título heading/h6.
+ * - light (Claro): FAQ, linha embaixo, título body/large e botão circular de 32px.
+ * Mobile usa a variante Mobile; tablet em diante, a Desktop. O conteúdo vem do slot padrão ou
+ * da prop `content`. A borda que falta no primeiro/último item fica a cargo da seção.
+ */
+import Icon from '../Icon/Icon.astro';
+
+export interface Props {
+  title: string;
+  content?: string;
+  theme?: 'dark' | 'light';
+  open?: boolean;
+  /** Nome do grupo exclusivo (atributo `name` do <details>). */
+  name?: string;
+  class?: string;
+}
+
+const { title, content, theme = 'dark', open = false, name, class: className } = Astro.props;
+const dark = theme === 'dark';
+---
+
+<details
+  name={name}
+  open={open}
+  class:list={[
+    'group',
+    dark
+      ? 'border-t border-border-inverse/14 py-4 open:border-border-inverse/50 tablet:py-5'
+      : 'border-b border-border-subtle/12 py-5 tablet:py-6',
+    className,
+  ]}
+>
+  <summary
+    class:list={[
+      'flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden',
+      dark
+        ? 'text-body-large-regular text-text-inverse/55 group-open:text-body-large group-open:text-text-inverse-emphasis tablet:text-h6-medium tablet:group-open:text-h6'
+        : 'text-body-base-semibold text-text-primary tablet:text-body-large',
+    ]}
+  >
+    {title}
+    {dark ? (
+      <span class="shrink-0">
+        <Icon name="plus" class="size-5 text-icon-inverse group-open:hidden tablet:size-6" />
+        <Icon
+          name="arrow-right"
+          class="hidden size-5 text-icon-accent group-open:block tablet:size-6"
+        />
+      </span>
+    ) : (
+      <span class="flex size-8 shrink-0 items-center justify-center rounded-full text-icon-primary inset-ring inset-ring-border-subtle/20 group-open:bg-action-primary group-open:inset-ring-0">
+        <Icon name="plus" size={16} class="group-open:hidden" />
+        <Icon name="minus" size={16} class="hidden group-open:block" />
+      </span>
+    )}
+  </summary>
+  <div
+    class:list={[
+      'text-body-small tablet:text-body-base',
+      dark
+        ? 'mt-2 text-text-inverse-muted tablet:mt-3 tablet:max-w-116'
+        : 'mt-3 text-text-secondary tablet:max-w-148',
+    ]}
+  >
+    <slot>{content}</slot>
+  </div>
+</details>
+
+<style>
+  /* 200ms open/close from the Figma prototype. Browsers without ::details-content just snap. */
+  details {
+    interpolate-size: allow-keywords;
+  }
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 200ms ease-out,
+      content-visibility 200ms allow-discrete;
+  }
+  details[open]::details-content {
+    block-size: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    details::details-content {
+      transition: none;
+    }
+  }
+</style>

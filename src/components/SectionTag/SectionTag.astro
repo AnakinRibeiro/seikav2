@@ -1,0 +1,20 @@
+---
+/**
+ * Rótulo acima do título de cada seção (Figma: Tag de seção).
+ * Ícone 20px + texto body/base-semibold, ambos em text/accent. Sem fundo.
+ */
+import Icon, { type IconName } from '../Icon/Icon.astro';
+
+export interface Props {
+  text: string;
+  icon: IconName;
+  class?: string;
+}
+
+const { text, icon, class: className } = Astro.props;
+---
+
+<p class:list={['flex items-center gap-2 text-body-base-semibold text-text-accent', className]}>
+  <Icon name={icon} size={20} class="shrink-0" />
+  {text}
+</p>

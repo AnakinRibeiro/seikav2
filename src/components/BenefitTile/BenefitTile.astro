@@ -1,0 +1,57 @@
+---
+/**
+ * Card de benefício do bento Energia solar (Figma: Tile benefício). Raio page (28px).
+ * - featured (Destaque): amarelo, ícone em círculo navy, valor grande (h3 no mobile, h2 do tablet em diante).
+ *   Tablet/desktop: 320px de altura, padding 32; mobile: altura pelo conteúdo, padding 24.
+ * - default (Padrão): bg/subtle, ícone em círculo branco. Tablet/desktop: 270px, padding 24; mobile: padding 20.
+ * A largura vem do grid da seção.
+ */
+import Icon, { type IconName } from '../Icon/Icon.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  icon: IconName;
+  type?: 'featured' | 'default';
+  /** Só no featured: o número em destaque (ex.: "até 95%"). */
+  value?: string;
+  class?: string;
+}
+
+const { title, description, icon, type = 'default', value, class: className } = Astro.props;
+---
+
+{type === 'featured' ? (
+  <div
+    class:list={[
+      'flex flex-col gap-10 rounded-page bg-action-primary p-6 tablet:h-80 tablet:justify-between tablet:gap-0 tablet:p-8',
+      className,
+    ]}
+  >
+    <div class="flex items-center justify-between gap-4">
+      <h3 class="text-body-large text-text-primary">{title}</h3>
+      <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-bg-inverse text-icon-on-photo">
+        <Icon name={icon} size={20} />
+      </span>
+    </div>
+    <div class="flex flex-col gap-2">
+      {value && <p class="text-h3 text-text-primary tablet:text-h2">{value}</p>}
+      <p class="text-body-base text-text-secondary">{description}</p>
+    </div>
+  </div>
+) : (
+  <div
+    class:list={[
+      'flex flex-col gap-4 rounded-page bg-bg-subtle p-5 tablet:h-67.5 tablet:p-6',
+      className,
+    ]}
+  >
+    <div class="flex flex-col gap-2">
+      <span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-bg-page text-icon-primary">
+        <Icon name={icon} size={22} />
+      </span>
+      <h3 class="text-body-large text-text-primary">{title}</h3>
+    </div>
+    <p class="text-body-base text-text-secondary">{description}</p>
+  </div>
+)}

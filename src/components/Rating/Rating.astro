@@ -1,0 +1,25 @@
+---
+/**
+ * Cinco estrelas de avaliação (Figma: Avaliação), preenchidas em icon/accent, gap 2px.
+ * P = 16px (card da hero), M = 20px (depoimento em destaque). Sem nota numérica (PRODUCT.md).
+ */
+import Icon from '../Icon/Icon.astro';
+
+export interface Props {
+  size?: 'P' | 'M';
+  class?: string;
+}
+
+const { size = 'P', class: className } = Astro.props;
+const px = size === 'M' ? 20 : 16;
+---
+
+<div
+  role="img"
+  aria-label="Avaliação de 5 estrelas"
+  class:list={['flex gap-0.5 text-icon-accent', className]}
+>
+  {Array.from({ length: 5 }, () => (
+    <Icon name="star" size={px} fill="currentColor" />
+  ))}
+</div>

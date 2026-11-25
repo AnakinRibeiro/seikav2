@@ -1,0 +1,35 @@
+---
+/**
+ * Par Anterior/Próximo (Figma: Controles de carrossel), usado em Depoimentos e Portfólio.
+ * Só a marcação: a seção liga os botões ao carrossel pelos atributos `data-carousel-prev` e
+ * `data-carousel-next` e, se quiser, por `controls` (id do elemento controlado).
+ */
+import IconButton from '../IconButton/IconButton.astro';
+
+export interface Props {
+  /** id do elemento que os botões controlam (aria-controls). */
+  controls?: string;
+  prevLabel?: string;
+  nextLabel?: string;
+  class?: string;
+}
+
+const { controls, prevLabel = 'Anterior', nextLabel = 'Próximo', class: className } = Astro.props;
+---
+
+<div class:list={['flex items-center gap-2', className]}>
+  <IconButton
+    variant="secondary"
+    icon="arrow-left"
+    label={prevLabel}
+    aria-controls={controls}
+    data-carousel-prev
+  />
+  <IconButton
+    variant="primary"
+    icon="arrow-right"
+    label={nextLabel}
+    aria-controls={controls}
+    data-carousel-next
+  />
+</div>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '../../../.storybook/types';
-import Icon from './Icon.astro';
+import Icon, { type Props } from './Icon.astro';
 
 const names = [
   'arrow-left',
@@ -40,10 +40,10 @@ const meta = {
     },
   },
   args: { name: 'sun', size: 24, class: 'text-icon-primary' },
-} satisfies Meta;
+} satisfies Meta<Props>;
 
 export default meta;
-type Story = StoryObj<typeof meta.args>;
+type Story = StoryObj<Props>;
 
 export const Padrao: Story = { name: 'Padrão' };
 export const Destaque: Story = { args: { name: 'zap', size: 20, class: 'text-icon-accent' } };

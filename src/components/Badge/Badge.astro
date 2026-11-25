@@ -1,0 +1,27 @@
+---
+/**
+ * Selo de vidro sobre fotos (Figma: Badge). Fundo branco 10% + blur, borda branca 28%.
+ * Responsivo como no Figma: no mobile usa a variante Mobile (body/legal, ícone 14, quebra
+ * até 312px, raio container); do tablet em diante, a Desktop (pílula, body/small-medium, ícone 16).
+ */
+import Icon, { type IconName } from '../Icon/Icon.astro';
+
+export interface Props {
+  text: string;
+  icon?: IconName;
+  class?: string;
+}
+
+const { text, icon = 'sun', class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex max-w-78 items-center gap-1.5 rounded-container bg-bg-page/10 px-3 py-1 text-body-legal text-text-inverse inset-ring inset-ring-border-inverse/28 backdrop-blur-[8px]',
+    'tablet:max-w-none tablet:gap-2 tablet:rounded-full tablet:py-1.5 tablet:text-body-small-medium tablet:whitespace-nowrap',
+    className,
+  ]}
+>
+  <Icon name={icon} class="size-3.5 shrink-0 text-icon-on-photo tablet:size-4" />
+  {text}
+</span>

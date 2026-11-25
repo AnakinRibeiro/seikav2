@@ -1,0 +1,31 @@
+---
+/**
+ * Link circular de 40px para redes sociais no footer (Figma: Botão social). Ícone de 18px.
+ * Borda navy 15%; no hover, fundo navy-50 e borda cheia.
+ */
+import Icon from '../Icon/Icon.astro';
+
+export interface Props {
+  network: 'instagram' | 'facebook' | 'linkedin';
+  href: string;
+  /** Nome acessível. Padrão: "SEIKA no <rede>". */
+  label?: string;
+  class?: string;
+}
+
+const names = { instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' } as const;
+const { network, href, label = `SEIKA no ${names[network]}`, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  aria-label={label}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    'inline-flex size-10 shrink-0 items-center justify-center rounded-full text-icon-primary inset-ring inset-ring-border-subtle/15 transition-colors hover:bg-action-secondary-hover hover:inset-ring-border-strong',
+    className,
+  ]}
+>
+  <Icon name={network} size={18} />
+</a>

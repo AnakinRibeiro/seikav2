@@ -7,7 +7,7 @@ related_targets: []
 
 # Surface: Landing page Seika (Figma, Desktop 1440)
 
-Mode: Persuade. Audience: homeowners with high bills and businesses (industry, commerce, rural, condos). Action: send energy bill photo via WhatsApp / simulate savings. Proof: responsible engineer + CREA, 12 real install photos, 3 real testimonials (stars, no numeric rating). Constraints: Inter only, max 56px, body 16px; Spacing + Radius variables on every padding/gap/radius; Desktop 12-col grid (80/16); brand paint styles Primary (amber) and Secondary (blue).
+Mode: Persuade. Audience: homeowners with high bills and businesses (industry, commerce, rural, condos). Action: send energy bill photo via WhatsApp / simulate savings. Proof: responsible engineer + CREA, 12 real install photos, 3 real testimonials (stars, no numeric rating). Constraints: Inter only, max 64px (hero h1), body 16px; Spacing + Radius variables on every padding/gap/radius; Desktop 12-col grid (80/16); brand paint styles Primary (amber) and Secondary (blue).
 
 Deliverable: two full Desktop options (A, B) in Figma page "Landing Page", each testing a different reference approach per section; the user will pick per section for a refined final.
 

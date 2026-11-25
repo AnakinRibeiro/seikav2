@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Undecided. Current phase is design-only in Figma (file "Seika V2", key `oxd78QvwXFtqORDFaXBDrl`); no code until a final direction is chosen.
+Astro + Tailwind CSS v4 + TypeScript (strict), pnpm. Hosted on Vercel (static output). Components are documented in Storybook. Design source: Figma file "Seika V2" (key `oxd78QvwXFtqORDFaXBDrl`).
 
 ## Users
 
@@ -34,7 +34,7 @@ Claims in copy: up to 95% reduction on the energy bill; residential payback typi
 
 - Name: SEIKA Engenharia — "Soluções e projetos". Logo is a raster in the Figma "Assets" page (amber on transparent).
 - Brand colors: primary #E8A53D (amber), secondary #176593 (blue); full 50–900 scales exist as Figma paint styles.
-- Typeface: Inter. Max type size 56px, body 16px.
+- Typeface: Inter. Max type size 64px (hero title on desktop, `heading/h1`); section titles max 56px; body 16px.
 - Figma variables are mandatory: "Spacing" collection for all padding/gaps, "Radius" collection for all corner radii. Layout grid styles Desktop (12 col), Tablet (8 col), Mobile (4 col) must be followed.
 - Voice: Portuguese (pt-BR), technical but plain, confident, no hype.
 

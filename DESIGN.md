@@ -1,7 +1,7 @@
 # Seika — Design (handoff)
 
 Fonte da verdade: arquivo Figma **Seika V2** (`oxd78QvwXFtqORDFaXBDrl`).
-Tokens exportados: [`design-tokens.json`](design-tokens.json).
+Tokens exportados: [`design-tokens.json`](design-tokens.json). No código, os tokens vivem em [`src/styles/global.css`](src/styles/global.css) (tema Tailwind v4).
 
 | Página Figma | Conteúdo |
 |---|---|
@@ -126,5 +126,9 @@ No tablet, todos os componentes usam a variante Desktop esticada.
 ## 6. Pendências
 
 - **Overlay do menu** (tablet e mobile) ainda não foi desenhado.
-- **Estados de foco** (teclado) e **estados desabilitados** não foram desenhados. Sugestão: anel de 2px em `action/primary` com 2px de offset.
-- **Conflito com o `PRODUCT.md`:** ele define fonte máxima de 56px, mas o título da hero no desktop usa `heading/h1` (64px). Confirmar qual vale.
+- **Estados desabilitados** não foram desenhados.
+
+Decisões tomadas (2026-11-25):
+
+- **Foco (teclado):** anel de 2px em `action/primary` com 2px de offset, só em `:focus-visible`. Implementado globalmente em `src/styles/global.css`.
+- **Título da hero:** vale o Figma, `heading/h1` com 64px no desktop. O `PRODUCT.md` foi atualizado.

@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "@fontsource-variable/inter";
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
 
 /*
  * Seika theme — mirrors the Figma file "Seika V2" (see DESIGN.md and design-tokens.json).
@@ -39,7 +39,7 @@
   --breakpoint-*: initial;
   --font-*: initial;
 
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
 
   /* Spacing: Figma Spacing/N = N × 4px, so p-4 = Spacing/4 = 16px, p-0.5 = Spacing/half. */
   --spacing: 4px;

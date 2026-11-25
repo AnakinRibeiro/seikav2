@@ -11,6 +11,8 @@ Requer Node 22.23+ e pnpm.
 | `pnpm install` | Instala as dependências |
 | `pnpm dev` | Servidor local em `localhost:4321` |
 | `pnpm check` | Checagem de tipos (`astro check`) |
+| `pnpm lint` / `pnpm lint:fix` | ESLint (TypeScript, Astro e acessibilidade) |
+| `pnpm format` / `pnpm format:check` | Prettier (ordena as classes Tailwind) |
 | `pnpm build` | Checa os tipos e gera o site estático em `dist/` |
 | `pnpm preview` | Serve o build localmente |
 

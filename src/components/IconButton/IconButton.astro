@@ -1,0 +1,50 @@
+---
+/**
+ * Botão circular de 48px só com ícone (Figma: Botão ícone). Ícone de 20px.
+ * - primary: amarelo (controle "próximo").
+ * - secondary: borda navy 25% em fundo claro (controle "anterior").
+ * - secondary-inverse: borda branca 40% sobre fundo escuro ou foto (menu no tablet/mobile).
+ * `label` é obrigatório: é o nome acessível do botão.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from '../Icon/Icon.astro';
+
+type Variant = 'primary' | 'secondary' | 'secondary-inverse';
+
+export interface Props extends Omit<HTMLAttributes<'button'>, 'type'> {
+  icon: IconName;
+  label: string;
+  variant?: Variant;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const {
+  icon,
+  label,
+  variant = 'primary',
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const variants: Record<Variant, string> = {
+  primary: 'bg-action-primary text-action-on-primary hover:bg-action-primary-hover',
+  secondary:
+    'text-icon-primary inset-ring inset-ring-border-subtle/25 hover:bg-action-secondary-hover hover:inset-ring-border-strong',
+  'secondary-inverse':
+    'text-icon-inverse inset-ring inset-ring-border-inverse/40 hover:bg-bg-page/10 hover:inset-ring-border-inverse',
+};
+---
+
+<button
+  type={type}
+  aria-label={label}
+  class:list={[
+    'inline-flex size-12 shrink-0 items-center justify-center rounded-full transition-colors',
+    variants[variant],
+    className,
+  ]}
+  {...rest}
+>
+  <Icon name={icon} size={20} />
+</button>

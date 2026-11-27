@@ -1,0 +1,138 @@
+---
+/**
+ * Portfólio (Figma: "Portfólio — carrossel que ultrapassa o grid").
+ * Galeria de 8 fotos que começa alinhada ao container e sai pela direita da tela. Scroll horizontal
+ * nativo com snap por foto; as setas avançam uma foto (em loop) e a barra de progresso acompanha a
+ * posição. Sem JavaScript a galeria continua rolável; só as setas e a barra ficam parados.
+ */
+import { Picture } from 'astro:assets';
+import cobertura from '../assets/images/portfolio/cobertura-industrial.png';
+import galpao from '../assets/images/portfolio/galpao-metalico.png';
+import inversor from '../assets/images/portfolio/inversor-protecao.png';
+import quadro from '../assets/images/portfolio/quadro-dps.png';
+import residencia from '../assets/images/portfolio/residencia-ceramico.png';
+import sobrado from '../assets/images/portfolio/sobrado-urbano.png';
+import telhado from '../assets/images/portfolio/telhado-escuro.png';
+import usina from '../assets/images/portfolio/usina-industrial.png';
+import CarouselControls from '../components/CarouselControls/CarouselControls.astro';
+import SectionTag from '../components/SectionTag/SectionTag.astro';
+
+const photos = [
+  { src: usina, alt: 'Usina em telhado industrial' },
+  { src: residencia, alt: 'Residência com telhado cerâmico' },
+  { src: galpao, alt: 'Galpão com estrutura metálica' },
+  { src: sobrado, alt: 'Sobrado em área urbana' },
+  { src: telhado, alt: 'Telhado com telha escura' },
+  { src: cobertura, alt: 'Cobertura industrial' },
+  { src: inversor, alt: 'Inversor e quadro de proteção' },
+  { src: quadro, alt: 'Quadro com DPS e disjuntores' },
+];
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section id="portfolio" class="py-section-y">
+  <div class="flex flex-col gap-section-gap">
+    <header class="container-page flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between">
+      <div class="flex flex-col gap-3">
+        <SectionTag text="Portfólio" icon="image" />
+        <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+          Alguns dos serviços que realizamos
+        </h2>
+      </div>
+      <CarouselControls controls="portfolio-galeria" />
+    </header>
+
+    {/* Edge to edge on purpose: the strip starts at the container's left edge and bleeds out to the right. */}
+    {/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- scrollable region must be focusable so keyboard users can scroll it */}
+    <div
+      id="portfolio-galeria"
+      role="region"
+      aria-label="Galeria de projetos"
+      tabindex="0"
+      class="gallery relative snap-x snap-mandatory overflow-x-auto"
+    >
+      <ul class="flex w-max gap-4">
+        {photos.map((photo, i) => (
+          <li
+            class:list={[
+              'relative h-90 shrink-0 snap-start overflow-hidden rounded-container tablet:h-100 desktop:h-120',
+              i === 0 ? 'w-75 tablet:w-110 desktop:w-140' : 'w-60 tablet:w-75 desktop:w-92',
+            ]}
+          >
+            <Picture
+              src={photo.src}
+              alt={photo.alt}
+              formats={['avif', 'webp']}
+              widths={[640, 960, 1280]}
+              sizes="(min-width: 1024px) 854px, (min-width: 768px) 711px, 640px"
+              class="absolute inset-0 size-full object-cover"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+    {/* eslint-enable astro/jsx-a11y/no-noninteractive-tabindex */}
+
+    <div class="container-page flex items-center gap-4 text-body-small-semibold">
+      <span class="text-text-primary">{pad(1)}</span>
+      <div class="relative h-0.5 flex-1 bg-(--primitive-navy-100)">
+        <div
+          data-progress
+          class="absolute top-0 left-0 h-full bg-action-primary"
+          style={`width: ${100 / photos.length}%`}
+        ></div>
+      </div>
+      <span class="text-text-secondary">{pad(photos.length)}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Same left edge as `container-page` (Figma: strip starts at the container, 152 / 54 / 15.5px). */
+  .gallery {
+    --gallery-gutter: calc((100% - min(var(--container-page), 100% - 32px)) / 2);
+    padding-left: var(--gallery-gutter);
+    scroll-padding-left: var(--gallery-gutter);
+    scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  const gallery = document.querySelector<HTMLElement>('#portfolio-galeria');
+
+  if (gallery) {
+    const root = gallery.closest('section')!;
+    const items = [...gallery.querySelectorAll<HTMLElement>('li')];
+    const indicator = root.querySelector<HTMLElement>('[data-progress]');
+    // Snap position of each photo: its offset from the first one (the gutter cancels out).
+    const stops = items.map((item) => item.offsetLeft - items[0].offsetLeft);
+    const maxScroll = () => gallery.scrollWidth - gallery.clientWidth;
+
+    const go = (left: number) =>
+      gallery.scrollTo({
+        left,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+
+    const update = () => {
+      if (!indicator) return;
+      const progress = maxScroll() > 0 ? Math.min(gallery.scrollLeft / maxScroll(), 1) : 0;
+      // The indicator is 1/n wide, so it travels the remaining (n - 1)/n of the track.
+      indicator.style.left = `${progress * (100 - 100 / items.length)}%`;
+    };
+
+    root.querySelector('[data-carousel-next]')?.addEventListener('click', () => {
+      const next = stops.find((stop) => stop > gallery.scrollLeft + 1);
+      go(next === undefined || gallery.scrollLeft >= maxScroll() - 1 ? 0 : next);
+    });
+    root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => {
+      const prev = stops.findLast((stop) => stop < gallery.scrollLeft - 1);
+      go(prev === undefined ? maxScroll() : prev);
+    });
+    gallery.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>

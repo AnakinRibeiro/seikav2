@@ -1,0 +1,110 @@
+---
+/**
+ * Energia solar (Figma: "Energia solar — bento com destaque 95%").
+ * Cabeçalho (tag, título, CTA, texto) + bento: card amarelo e foto em uma linha no desktop
+ * (empilhados no tablet/mobile) e 4 cards de benefício (4 colunas → 2x2 → 1 coluna).
+ */
+import { Picture } from 'astro:assets';
+import photo from '../assets/images/energia-solar.png';
+import Badge from '../components/Badge/Badge.astro';
+import BenefitTile from '../components/BenefitTile/BenefitTile.astro';
+import Button from '../components/Button/Button.astro';
+import SectionTag from '../components/SectionTag/SectionTag.astro';
+import { whatsapp } from '../config/site';
+
+const benefits = [
+  {
+    icon: 'leaf',
+    title: 'Sustentabilidade',
+    description:
+      'Ajude o planeta com uma fonte de energia limpa e renovável. Energia solar não polui e contribui para um futuro mais verde.',
+  },
+  {
+    icon: 'home',
+    title: 'Valorização do imóvel',
+    description:
+      'Instalar placas solares valoriza seu imóvel. É um diferencial que agrega tecnologia e consciência ambiental.',
+  },
+  {
+    icon: 'wrench',
+    title: 'Manutenção simples',
+    description:
+      'Os sistemas fotovoltaicos exigem baixa manutenção e têm alta durabilidade. Mais segurança e menos preocupação.',
+  },
+  {
+    icon: 'shield',
+    title: 'Proteção contra aumentos',
+    description:
+      'Tenha mais autonomia e previsibilidade. Fuja dos aumentos nas tarifas de energia elétrica.',
+  },
+] as const;
+---
+
+<section id="energia-solar" class="py-section-y">
+  <div class="container-page flex flex-col gap-section-gap">
+    <header class="flex flex-col gap-5">
+      <div class="flex flex-col items-start gap-6 desktop:flex-row desktop:justify-between">
+        <div class="flex flex-col gap-3">
+          <SectionTag text="Energia solar" icon="sun" />
+          <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+            <!-- Line breaks follow Figma: 3 lines on mobile and desktop, 2 on tablet. -->
+            Transformando casas <br class="tablet:hidden desktop:inline" />
+            em fontes de energia <br class="tablet:hidden desktop:inline" />
+            limpa e renovável.
+          </h2>
+        </div>
+        <Button
+          text="Simular minha economia"
+          href={whatsapp.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+      <p class="text-body-base text-text-secondary">
+        Com a energia solar, sua casa se torna mais do que apenas um lugar para morar, ela se torna
+        uma fonte de energia sustentável. Ao instalar painéis solares em seu telhado, você aproveita
+        o poder do sol para gerar eletricidade limpa, reduzindo sua dependência da rede elétrica
+        tradicional.
+      </p>
+    </header>
+
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 desktop:flex-row">
+        <BenefitTile
+          type="featured"
+          icon="trend-down"
+          title="Redução na conta de luz"
+          value="até 95%"
+          description="da sua conta de luz. Energia solar é uma das formas mais inteligentes de economizar no longo prazo."
+          class="desktop:w-92 desktop:shrink-0"
+        />
+        <div class="relative h-60 overflow-hidden rounded-page tablet:h-90 desktop:h-80 desktop:flex-1">
+          <Picture
+            src={photo}
+            alt="Painéis solares instalados no telhado de uma residência"
+            formats={['avif', 'webp']}
+            widths={[400, 700, 1280]}
+            sizes="(min-width: 1024px) 752px, (min-width: 768px) 660px, 344px"
+            class="size-full object-cover"
+          />
+          {/* Figma 2nd fill: black gradient, 0% at 43.6% of the height to 80% at the bottom. */}
+          <div
+            aria-hidden="true"
+            class="absolute inset-0 bg-[linear-gradient(to_bottom,rgb(0_0_0/0)_43.6%,rgb(0_0_0/0.8)_100%)]"
+          ></div>
+          <Badge
+            text="Sistema fotovoltaico residencial - Execução Seika"
+            icon="sun"
+            class="absolute bottom-4 left-4 tablet:bottom-6 tablet:left-6"
+          />
+        </div>
+      </div>
+
+      <div class="grid gap-4 tablet:grid-cols-2 desktop:grid-cols-4">
+        {benefits.map((benefit) => (
+          <BenefitTile {...benefit} />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

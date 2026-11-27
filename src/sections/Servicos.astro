@@ -1,0 +1,123 @@
+---
+/**
+ * Serviços (Figma: "Serviços — imagem fixa + lista (accordion)").
+ * Fundo navy com a "luz do sol" amarela no canto superior esquerdo. Cabeçalho (tag, título,
+ * texto) + foto fixa e lista de serviços em accordion: lado a lado no desktop, empilhados no
+ * tablet/mobile. A foto não muda com o item aberto (decisão de 2026-11-25); só um item abre
+ * por vez e o primeiro abre por padrão.
+ */
+import { Picture } from 'astro:assets';
+import photo from '../assets/images/servicos.png';
+import Accordion from '../components/Accordion/Accordion.astro';
+import Badge from '../components/Badge/Badge.astro';
+import SectionTag from '../components/SectionTag/SectionTag.astro';
+
+const services = [
+  {
+    title: 'Energia Solar Fotovoltaica',
+    content:
+      'Projeto, dimensionamento e instalação de sistemas fotovoltaicos para residências, comércios e indústrias, proporcionando economia e sustentabilidade.',
+  },
+  {
+    title: 'Projetos Elétricos',
+    content:
+      'Desenvolvimento de projetos elétricos de baixa e média tensão, atendendo às normas técnicas vigentes e às exigências das concessionárias.',
+  },
+  {
+    title: 'Eficiência Energética',
+    content:
+      'Análise detalhada do consumo de energia com desenvolvimento de soluções para redução de custos e melhoria do desempenho energético.',
+  },
+  {
+    title: 'Estudo de ICMS sobre energia elétrica',
+    content:
+      'Análise técnica das faturas de energia para identificação de créditos de ICMS recuperáveis, com emissão de laudos técnicos e suporte ao processo de recuperação tributária.',
+  },
+  {
+    title: 'Laudos técnicos',
+    content:
+      'Elaboração de laudos técnicos para processos judiciais, seguros, concessionárias de energia e avaliações técnicas.',
+  },
+  {
+    title: 'Consultoria Técnica',
+    content:
+      'Consultoria especializada para empresas e consumidores em assuntos relacionados à engenharia elétrica, concessionárias de energia e conformidade normativa.',
+  },
+];
+---
+
+<!-- shortcut: #061824 (fim do degradê) não tem token no Figma; criar um primitive se for reutilizado. -->
+<section
+  id="servicos"
+  class="relative isolate overflow-hidden bg-linear-to-b from-bg-inverse to-[#061824] py-section-y"
+>
+  <div aria-hidden="true" class="sun-light absolute inset-0 -z-10"></div>
+
+  <div class="container-page flex flex-col gap-section-gap">
+    <header class="flex flex-col gap-4 desktop:flex-row desktop:items-end desktop:justify-between">
+      <div class="flex flex-col gap-3">
+        <SectionTag text="Nossos serviços" icon="zap" />
+        <h2 class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:w-188 desktop:text-h2">
+          Engenharia elétrica <br class="hidden desktop:inline" />
+          do projeto ao laudo
+        </h2>
+      </div>
+      <p class="text-body-base text-text-inverse-muted desktop:w-92">
+        Um único responsável técnico para todo o ciclo: estudo de viabilidade, projeto, execução e
+        acompanhamento da geração.
+      </p>
+    </header>
+
+    <div class="flex flex-col gap-8 desktop:flex-row desktop:items-start desktop:justify-between">
+      <div class="relative flex h-70 flex-col items-start justify-end overflow-hidden rounded-container p-4 tablet:h-100 tablet:p-6 desktop:h-auto desktop:w-132 desktop:shrink-0 desktop:self-stretch">
+        <Picture
+          src={photo}
+          alt="Usina fotovoltaica instalada em telhado industrial"
+          formats={['avif', 'webp']}
+          widths={[400, 700, 1280]}
+          sizes="(min-width: 1024px) 528px, (min-width: 768px) 660px, 344px"
+          class="absolute inset-0 size-full object-cover"
+        />
+        {/* Figma 2nd fill: black gradient, 0% at 50.1% of the height to 80% at the bottom. */}
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 bg-[linear-gradient(to_bottom,rgb(0_0_0/0)_50.1%,rgb(0_0_0/0.8)_100%)]"
+        ></div>
+        <Badge
+          text="Sistema fotovoltaico industrial - Execução Seika"
+          icon="sun"
+          class="relative"
+        />
+      </div>
+
+      <div class="desktop:w-140">
+        {services.map((service, i) => (
+          <Accordion
+            {...service}
+            name="servicos"
+            open={i === 0}
+            class={i === services.length - 1 ? 'border-b' : undefined}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Figma "Luz do sol": radial amarelo (#EDCD64, 57% → 0%) a 90%, esticado sobre a seção. */
+  .sun-light {
+    background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 375 1124' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.9'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(22.643 88.66 -18.138 110.68 -13.802 -323.96)'><stop stop-color='rgba(237,205,100,0.57)' offset='0'/><stop stop-color='rgba(237,205,100,0.53)' offset='0.27'/><stop stop-color='rgba(237,205,100,0.3)' offset='0.49'/><stop stop-color='rgba(237,205,100,0.09)' offset='0.74'/><stop stop-color='rgba(237,205,100,0)' offset='1'/></radialGradient></defs></svg>")
+      0 0 / 100% 100% no-repeat;
+  }
+  @media (min-width: 48rem) {
+    .sun-light {
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 768 1303' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.9'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(46.373 102.78 -37.147 128.31 -28.267 -375.55)'><stop stop-color='rgba(237,205,100,0.57)' offset='0'/><stop stop-color='rgba(237,205,100,0.53)' offset='0.27'/><stop stop-color='rgba(237,205,100,0.3)' offset='0.49'/><stop stop-color='rgba(237,205,100,0.09)' offset='0.74'/><stop stop-color='rgba(237,205,100,0)' offset='1'/></radialGradient></defs></svg>");
+    }
+  }
+  @media (min-width: 64rem) {
+    .sun-light {
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 2043' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.9'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(86.95 161.15 -69.65 201.18 -53 -588.84)'><stop stop-color='rgba(237,205,100,0.57)' offset='0'/><stop stop-color='rgba(237,205,100,0.53)' offset='0.27'/><stop stop-color='rgba(237,205,100,0.3)' offset='0.49'/><stop stop-color='rgba(237,205,100,0.09)' offset='0.74'/><stop stop-color='rgba(237,205,100,0)' offset='1'/></radialGradient></defs></svg>");
+    }
+  }
+</style>

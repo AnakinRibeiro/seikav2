@@ -27,7 +27,7 @@ Coleções de variáveis no Figma:
 Regras:
 
 - **No código, use os tokens semânticos.** As primitivas existem só como fonte dos aliases. Os estilos de cor `Primary/*` e `Secondary/*` apontam para as primitivas.
-- **Opacidade é aplicada no uso, não no token.** Exemplos: `border/subtle` a 12–25%, `border/inverse` a 28–40%, título fechado do accordion escuro com `text/inverse` a 55%, tab inativa com `text/primary` a 60%. O componente no Figma tem o valor exato.
+- **Opacidade é aplicada no uso, não no token.** Exemplos: `border/subtle` a 12–25%, `border/inverse` a 28–40%, tab inativa com `text/primary` a 60%. O componente no Figma tem o valor exato. Exceção: o título fechado do accordion escuro é `text/inverse` pleno; o componente no Figma tem 55%, mas todas as instâncias em Serviços sobrescrevem para 100%, e o código segue as instâncias.
 - **Nenhum padding ou gap fora da escala `Spacing`.**
 
 ### Layout (por breakpoint)

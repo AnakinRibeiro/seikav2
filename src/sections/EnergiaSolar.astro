@@ -115,47 +115,12 @@ const benefits = [
 </section>
 
 <script>
-  import { gsap, motionAllowed, ScrollTrigger, splitWords } from '../scripts/motion';
+  import { gsap, motionAllowed, revealHeader, ScrollTrigger } from '../scripts/motion';
 
   const root = document.querySelector<HTMLElement>('#energia-solar');
 
   if (root && motionAllowed()) {
-    // Header: tag, title (words rise from a mask), then button and text almost together.
-    const header = root.querySelector<HTMLElement>('[data-reveal-header]')!;
-    const tag = header.querySelector<HTMLElement>('[data-reveal]')!;
-    const words = splitWords(header.querySelector<HTMLElement>('[data-reveal-title]')!);
-    const rest = [...header.querySelectorAll<HTMLElement>('[data-reveal]')].slice(1);
-
-    gsap.set([tag, ...rest], { autoAlpha: 0, y: 18 });
-    ScrollTrigger.create({
-      trigger: header,
-      start: 'top 80%',
-      once: true,
-      onEnter: () => {
-        gsap
-          .timeline()
-          .to(tag, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            clearProps: 'transform',
-          })
-          .to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1)
-          .to(
-            rest,
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.7,
-              ease: 'power3.out',
-              stagger: 0.08,
-              clearProps: 'transform',
-            },
-            0.5,
-          );
-      },
-    });
+    revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
 
     // Bento cards: fade up with a left-to-right stagger, row by row as they scroll into view.
     const bento = root.querySelector<HTMLElement>('[data-reveal-bento]')!;

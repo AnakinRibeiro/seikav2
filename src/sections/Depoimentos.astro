@@ -1,0 +1,134 @@
+---
+/**
+ * Depoimentos (Figma: "Depoimentos — 1 em destaque com navegação").
+ * Um depoimento em destaque, trocado pelas abas de clientes ou pelas setas (em loop); o contador
+ * "n / 3" acompanha. Padrão de tabs (role tablist/tab/tabpanel) com tabindex móvel e setas do teclado.
+ * Abre no 2º depoimento, como no Figma. Sem JavaScript fica só o depoimento inicial.
+ */
+import CarouselControls from '../components/CarouselControls/CarouselControls.astro';
+import Rating from '../components/Rating/Rating.astro';
+import SectionTag from '../components/SectionTag/SectionTag.astro';
+import TestimonialTab from '../components/TestimonialTab/TestimonialTab.astro';
+
+const testimonials = [
+  {
+    initials: 'M',
+    name: 'Marcos',
+    description: 'Cliente comercial',
+    quote:
+      'Precisávamos de previsibilidade de custo. Fizeram o estudo, cuidaram da homologação e ainda ajustaram o cronograma para não parar a produção.',
+  },
+  {
+    initials: 'SA',
+    name: 'Sílvio Alberto',
+    description: 'Cliente residencial',
+    quote:
+      'Desde o primeiro contato, a equipe da Seika foi muito atenciosa. Fizeram todo o estudo do projeto, cuidaram de toda a homologação e ainda ajustaram o cronograma de instalação para não atrapalhar nossa rotina. Foi tudo muito bem planejado e acompanhado. Recomendo a Seika pela competência e pelo cuidado em cada etapa.',
+  },
+  {
+    initials: 'C',
+    name: 'Carlos',
+    description: 'Cliente residencial',
+    quote:
+      'Gostei muito da experiência com a Seika. Desde o planejamento até a instalação, tudo foi explicado com clareza e feito de forma muito organizada. A equipe cuidou de toda a parte burocrática e acompanhou o projeto de perto, o que deixou tudo muito mais tranquilo para nós. Um serviço sério, bem executado e com excelente atendimento.',
+  },
+];
+const initial = 1;
+---
+
+<section id="depoimentos" class="bg-bg-warm py-section-y">
+  <div class="container-page flex flex-col gap-section-gap">
+    <header class="flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between">
+      <div class="flex flex-col gap-3">
+        <SectionTag text="Depoimentos" icon="star" />
+        <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+          O que nossos clientes dizem
+        </h2>
+      </div>
+      <CarouselControls controls="depoimentos-paineis" />
+    </header>
+
+    <div class="flex flex-col gap-8 py-4">
+      <div class="flex items-center justify-between">
+        <Rating size="M" />
+        <p class="text-body-small-medium text-text-secondary" data-counter>
+          {initial + 1} / {testimonials.length}
+        </p>
+      </div>
+      {/* Panels share one grid cell so the height is the tallest quote and the tabs never jump. */}
+      <div id="depoimentos-paineis" class="grid">
+        {testimonials.map((t, i) => (
+          <div
+            role="tabpanel"
+            id={`depoimento-painel-${i}`}
+            aria-labelledby={`depoimento-aba-${i}`}
+            data-active={i === initial ? '' : undefined}
+            class="invisible col-start-1 row-start-1 text-body-large-regular text-text-primary data-active:visible tablet:text-h6-medium desktop:max-w-260 desktop:text-h5-medium"
+          >
+            <p>“{t.quote}”</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div
+      role="tablist"
+      aria-label="Depoimentos de clientes"
+      class="flex gap-2 tablet:gap-3 desktop:gap-4"
+    >
+      {testimonials.map((t, i) => (
+        <TestimonialTab
+          id={`depoimento-aba-${i}`}
+          controls={`depoimento-painel-${i}`}
+          initials={t.initials}
+          name={t.name}
+          description={t.description}
+          selected={i === initial}
+          class="flex-1"
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('#depoimentos');
+
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    const counter = root.querySelector<HTMLElement>('[data-counter]');
+    let current = tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+
+    const show = (index: number, focus = false) => {
+      current = (index + tabs.length) % tabs.length;
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === current));
+        tab.tabIndex = i === current ? 0 : -1;
+      });
+      panels.forEach((panel, i) => panel.toggleAttribute('data-active', i === current));
+      if (counter) counter.textContent = `${current + 1} / ${tabs.length}`;
+      if (focus) tabs[current]?.focus();
+    };
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i)));
+    root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => show(current - 1));
+    root.querySelector('[data-carousel-next]')?.addEventListener('click', () => show(current + 1));
+    root.querySelector('[role="tablist"]')?.addEventListener('keydown', (event) => {
+      const key = (event as KeyboardEvent).key;
+      const target =
+        key === 'ArrowRight'
+          ? current + 1
+          : key === 'ArrowLeft'
+            ? current - 1
+            : key === 'Home'
+              ? 0
+              : key === 'End'
+                ? tabs.length - 1
+                : null;
+      if (target === null) return;
+      event.preventDefault();
+      show(target, true);
+    });
+  }
+</script>

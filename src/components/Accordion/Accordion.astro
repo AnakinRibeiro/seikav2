@@ -90,4 +90,19 @@ const dark = theme === 'dark';
       transition: none;
     }
   }
+
+  /*
+   * Driven by GSAP (smoothAccordion in scripts/motion.ts): the content block is tweened, so the
+   * native pseudo must neither clip nor hide it. Resting closed state: collapsed and hidden.
+   */
+  details[data-smooth]::details-content {
+    block-size: auto;
+    content-visibility: visible;
+    transition: none;
+  }
+  details[data-smooth]:not([open]) > :last-child {
+    height: 0;
+    overflow: clip;
+    visibility: hidden;
+  }
 </style>

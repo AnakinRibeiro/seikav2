@@ -100,7 +100,7 @@ const services = [
         />
       </div>
 
-      <div class="desktop:w-140">
+      <div data-smooth-accordion class="desktop:w-140">
         {services.map((service, i) => (
           <Accordion
             {...service}
@@ -115,10 +115,14 @@ const services = [
 </section>
 
 <script>
-  import { motionAllowed, revealHeader } from '../scripts/motion';
+  import { motionAllowed, revealHeader, smoothAccordion } from '../scripts/motion';
 
   const header = document.querySelector<HTMLElement>('#servicos [data-reveal-header]');
-  if (header && motionAllowed()) revealHeader(header);
+  const list = document.querySelector<HTMLElement>('#servicos [data-smooth-accordion]');
+  if (motionAllowed()) {
+    if (header) revealHeader(header);
+    if (list) smoothAccordion(list);
+  }
 </script>
 
 <style>

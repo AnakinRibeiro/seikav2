@@ -80,3 +80,70 @@ export function revealHeader(header: HTMLElement) {
     },
   });
 }
+
+/**
+ * Smooth open/close for a list of `<details>` accordions (Accordion.astro), one open at a time.
+ * The content block's height and opacity are tweened instead of using the native snap/CSS
+ * transition. The `open` attribute flips right away, so the title, border and icon states do not
+ * lag behind; `details[data-smooth]` in Accordion.astro keeps the content visible while it
+ * animates. Needs `::details-content` (Chromium 131+, Safari 18.4+); anywhere else, or with
+ * reduced motion, the native accordion keeps working untouched.
+ */
+export function smoothAccordion(list: HTMLElement) {
+  if (!CSS.supports('selector(::details-content)')) return;
+
+  const items = [...list.querySelectorAll<HTMLDetailsElement>('details')];
+  const contentOf = (item: HTMLDetailsElement) => item.lastElementChild as HTMLElement;
+  const done = () => ScrollTrigger.refresh();
+
+  const open = (item: HTMLDetailsElement) => {
+    const content = contentOf(item);
+    const fromHeight = item.open ? content.offsetHeight : 0;
+    const fromAlpha = item.open || fromHeight ? Number(gsap.getProperty(content, 'opacity')) : 0;
+    gsap.killTweensOf(content);
+    item.open = true;
+    gsap.fromTo(
+      content,
+      { height: fromHeight, autoAlpha: fromAlpha },
+      {
+        height: 'auto',
+        autoAlpha: 1,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        clearProps: 'all',
+        onComplete: done,
+      },
+    );
+  };
+
+  const close = (item: HTMLDetailsElement) => {
+    const content = contentOf(item);
+    const fromHeight = content.offsetHeight;
+    gsap.killTweensOf(content);
+    item.open = false;
+    gsap.fromTo(
+      content,
+      { height: fromHeight, autoAlpha: Number(gsap.getProperty(content, 'opacity')) },
+      {
+        height: 0,
+        autoAlpha: 0,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        clearProps: 'all',
+        onComplete: done,
+      },
+    );
+  };
+
+  for (const item of items) {
+    // The native `name` group would close the other item instantly, before it could animate.
+    item.removeAttribute('name');
+    item.dataset.smooth = '';
+    item.querySelector('summary')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (item.open) return close(item);
+      items.filter((other) => other !== item && other.open).forEach(close);
+      open(item);
+    });
+  }
+}

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
+@import 'lenis/dist/lenis.css';
 
 /*
  * Seika theme — mirrors the Figma file "Seika V2" (see DESIGN.md and design-tokens.json).
@@ -181,6 +182,11 @@
     html {
       scroll-behavior: smooth;
     }
+  }
+
+  /* Lenis does the smoothing; native smooth scrolling on top of it would fight it. */
+  html.lenis {
+    scroll-behavior: auto !important;
   }
 
   /* Focus state not designed in Figma: 2px action/primary ring with 2px offset (decision 2026-11-25). */

@@ -1,0 +1,79 @@
+---
+/**
+ * Sobre (Figma: "Sobre — clássico: texto em tópicos + imagem").
+ * Texto (tag, título, parágrafo com destaques, lista "Atendemos" e CTA) ao lado da foto no desktop;
+ * foto abaixo do texto no tablet e no mobile. Lista em 2 colunas do tablet em diante.
+ */
+import { Picture } from 'astro:assets';
+import photo from '../assets/images/sobre.png';
+import Badge from '../components/Badge/Badge.astro';
+import Button from '../components/Button/Button.astro';
+import ListItem from '../components/ListItem/ListItem.astro';
+import SectionTag from '../components/SectionTag/SectionTag.astro';
+import { whatsapp } from '../config/site';
+
+const audience = [
+  'Indústrias',
+  'Comércios',
+  'Produtores rurais',
+  'Supermercados',
+  'Condomínios',
+  'Residências de alto consumo',
+];
+---
+
+<section id="sobre" class="py-section-y">
+  <div class="container-page flex flex-col gap-10 tablet:gap-12 desktop:flex-row desktop:items-center desktop:justify-between">
+    <div class="flex flex-col gap-8 desktop:w-140">
+      <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-3">
+          <SectionTag text="Quem somos" icon="award" />
+          <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+            Uma empresa de engenharia, não uma revenda de painéis
+          </h2>
+        </div>
+        <p class="text-body-base text-text-secondary">
+          A SEIKA Engenharia atua em projetos elétricos e sistemas fotovoltaicos sob
+          responsabilidade técnica do engenheiro{' '}
+          <strong>Adriano José Gorges (CREA-PR 206130/D)</strong>. Cada projeto é dimensionado a
+          partir do consumo real do cliente, com <strong>foco em economia</strong>,{' '}
+          <strong>segurança</strong> e <strong>conformidade com as normas técnicas</strong>.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4 border-t border-(color:--primitive-navy-100) pt-6">
+        <h3 class="text-body-base-semibold text-text-primary">Atendemos</h3>
+        <ul class="grid gap-3 tablet:grid-cols-2 tablet:gap-x-4">
+          {audience.map((text) => (
+            <ListItem text={text} />
+          ))}
+        </ul>
+      </div>
+
+      <Button
+        text="Simular minha economia"
+        href={whatsapp.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="self-start"
+      />
+    </div>
+
+    <div class="relative flex h-90 flex-col items-start justify-end overflow-hidden rounded-container p-4 tablet:h-120 tablet:p-6 desktop:h-auto desktop:w-116 desktop:shrink-0 desktop:self-stretch">
+      <Picture
+        src={photo}
+        alt="Usina fotovoltaica instalada em telhado industrial"
+        formats={['avif', 'webp']}
+        widths={[400, 700, 1280]}
+        sizes="(min-width: 1024px) 464px, (min-width: 768px) 660px, 344px"
+        class="absolute inset-0 size-full object-cover"
+      />
+      {/* Figma 2nd fill: black gradient, 0% at 50.1% of the height to 80% at the bottom. */}
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[linear-gradient(to_bottom,rgb(0_0_0/0)_50.1%,rgb(0_0_0/0.8)_100%)]"
+      ></div>
+      <Badge text="Sistema fotovoltaico industrial - Execução Seika" icon="sun" class="relative" />
+    </div>
+  </div>
+</section>

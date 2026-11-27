@@ -55,15 +55,23 @@ const services = [
   <div aria-hidden="true" class="sun-light absolute inset-0 -z-10"></div>
 
   <div class="container-page flex flex-col gap-section-gap">
-    <header class="flex flex-col gap-4 desktop:flex-row desktop:items-end desktop:justify-between">
+    <header
+      data-reveal-header
+      class="flex flex-col gap-4 desktop:flex-row desktop:items-end desktop:justify-between"
+    >
       <div class="flex flex-col gap-3">
-        <SectionTag text="Nossos serviços" icon="zap" />
-        <h2 class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:w-188 desktop:text-h2">
+        <div data-reveal>
+          <SectionTag text="Nossos serviços" icon="zap" />
+        </div>
+        <h2
+          data-reveal-title
+          class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:w-188 desktop:text-h2"
+        >
           Engenharia elétrica <br class="hidden desktop:inline" />
           do projeto ao laudo
         </h2>
       </div>
-      <p class="text-body-base text-text-inverse-muted desktop:w-92">
+      <p data-reveal class="text-body-base text-text-inverse-muted desktop:w-92">
         Um único responsável técnico para todo o ciclo: estudo de viabilidade, projeto, execução e
         acompanhamento da geração.
       </p>
@@ -105,6 +113,13 @@ const services = [
     </div>
   </div>
 </section>
+
+<script>
+  import { motionAllowed, revealHeader } from '../scripts/motion';
+
+  const header = document.querySelector<HTMLElement>('#servicos [data-reveal-header]');
+  if (header && motionAllowed()) revealHeader(header);
+</script>
 
 <style>
   /*

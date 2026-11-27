@@ -44,3 +44,39 @@ export function splitWords(el: HTMLElement) {
   gsap.set(words, { yPercent: 110 });
   return words;
 }
+
+/**
+ * Section header entrance, shared by the sections: the tag fades up, the title words rise from
+ * behind their masks, then the remaining `[data-reveal]` items (button, text) follow almost
+ * together. Marked with `data-reveal` (tag first), `data-reveal-title` and played once when the
+ * header reaches 80% of the viewport.
+ */
+export function revealHeader(header: HTMLElement) {
+  const [tag, ...rest] = header.querySelectorAll<HTMLElement>('[data-reveal]');
+  const words = splitWords(header.querySelector<HTMLElement>('[data-reveal-title]')!);
+
+  gsap.set([tag, ...rest], { autoAlpha: 0, y: 18 });
+  ScrollTrigger.create({
+    trigger: header,
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap
+        .timeline()
+        .to(tag, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', clearProps: 'transform' })
+        .to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1)
+        .to(
+          rest,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            stagger: 0.08,
+            clearProps: 'transform',
+          },
+          0.5,
+        );
+    },
+  });
+}

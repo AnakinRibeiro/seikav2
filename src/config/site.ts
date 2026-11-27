@@ -4,6 +4,14 @@ export const whatsapp = {
   url: 'https://wa.me/5541988285439',
 };
 
+export const contact = {
+  email: 'seikaengenharia@gmail.com',
+  location: 'Curitiba/PR e Região metropolitana',
+};
+
+// shortcut: the Instagram URL was not provided yet; the footer hides the button until it is set.
+export const social: { instagram?: string } = {};
+
 export const navLinks = [
   { label: 'Início', href: '#inicio' },
   { label: 'Serviços', href: '#servicos' },

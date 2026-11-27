@@ -1,0 +1,140 @@
+---
+/**
+ * CTA sobre imagem + footer sobreposto (Figma: "CTA sobre imagem + footer sobreposto").
+ * Foto de fundo com degradê navy; CTA centralizado no topo e, abaixo, o footer como um card branco
+ * sobreposto à foto (respiro de 16px nas laterais no desktop/tablet, 8px no mobile). As colunas do
+ * footer ficam em linha no desktop e quebram no tablet (Marca; Navegação, Serviços e Contato) e no mobile.
+ */
+import { Image, Picture } from 'astro:assets';
+import photo from '../assets/images/cta.png';
+import logo from '../assets/images/logo.png';
+import Button from '../components/Button/Button.astro';
+import Icon from '../components/Icon/Icon.astro';
+import SocialButton from '../components/SocialButton/SocialButton.astro';
+import { contact, navLinks, social, whatsapp } from '../config/site';
+
+const services = [
+  'Energia Solar Fotovoltaica',
+  'Projetos Elétricos',
+  'Eficiência Energética',
+  'Estudo de ICMS',
+  'Laudos técnicos',
+  'Consultoria Técnica',
+];
+const columnTitle = 'text-body-base-semibold text-text-primary';
+const columnList = 'flex flex-col gap-3 text-body-base text-text-secondary';
+const contactIcon = 'shrink-0 text-(--primitive-navy-600)';
+---
+
+<div class="relative isolate flex flex-col gap-section-y overflow-hidden pt-section-y pb-2 tablet:pb-4">
+  {/* Own wrapper so the <picture> element is not a flex item (it would add a gap). */}
+  <div aria-hidden="true" class="absolute inset-0 -z-10">
+    <Picture
+      src={photo}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280]}
+      sizes="100vw"
+      class="size-full object-cover"
+    />
+    {/* Figma 2nd fill: navy 92% at the top, 55% at 55% of the height, 25% at the bottom. */}
+    <div class="absolute inset-0 bg-linear-to-b from-bg-inverse/92 via-bg-inverse/55 via-55% to-bg-inverse/25"></div>
+  </div>
+
+  <section class="container-page flex flex-col items-center gap-5 text-center desktop:max-w-188">
+    <h2 class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:text-h2">
+      Comece pelo mais simples: mande a sua <span class="text-action-primary">conta de luz.</span>
+    </h2>
+    <p class="text-body-base text-text-inverse/85 tablet:max-w-155 tablet:text-body-large-regular">
+      Uma foto da fatura pelo WhatsApp já é o suficiente para sabermos quanto você pode economizar.
+      Sem compromisso, sem custo.
+    </p>
+    <Button
+      text="Enviar no WhatsApp"
+      icon="chat"
+      href={whatsapp.url}
+      target="_blank"
+      rel="noopener noreferrer"
+    />
+  </section>
+
+  <footer class="mx-2 rounded-page bg-bg-page pt-10 pb-6 tablet:mx-4 tablet:pt-12 tablet:pb-8 desktop:pt-16">
+    <div class="container-footer flex flex-col gap-10 tablet:gap-12 desktop:gap-16">
+      <div class="flex flex-wrap gap-x-8 gap-y-10 desktop:flex-nowrap desktop:justify-between desktop:gap-0">
+        <div class="flex w-full flex-col gap-5 desktop:w-92">
+          {/* The logo PNG is square with padding; this crop matches the Figma Logo frame (139×60). */}
+          <Image
+            src={logo}
+            alt="SEIKA Engenharia"
+            width={288}
+            class="h-15 w-34.75 object-cover object-[50%_46%]"
+          />
+          <p class="text-body-base text-text-secondary">
+            Projetos elétricos e sistemas fotovoltaicos dimensionados a partir do seu consumo real.
+          </p>
+          <p class="text-body-small text-text-secondary">
+            Resp. técnico: Eng. Adriano José Gorges · CREA-PR 206130/D
+          </p>
+        </div>
+
+        <nav aria-labelledby="footer-navegacao" class="flex flex-col gap-4">
+          <h3 id="footer-navegacao" class={columnTitle}>
+            Navegação
+          </h3>
+          <ul class={columnList}>
+            {navLinks.map((link) => (
+              <li>
+                <a href={link.href} class="transition-colors hover:text-text-primary">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div class="flex flex-col gap-4">
+          <h3 class={columnTitle}>Serviços</h3>
+          <ul class={columnList}>
+            {services.map((service) => (
+              <li>{service}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h3 class={columnTitle}>Contato</h3>
+          <ul class={columnList}>
+            <li class="flex items-center gap-2">
+              <Icon name="chat" size={18} class={contactIcon} />
+              <a
+                href={whatsapp.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="transition-colors hover:text-text-primary"
+              >
+                {whatsapp.display}
+              </a>
+            </li>
+            <li class="flex items-center gap-2">
+              <Icon name="mail" size={18} class={contactIcon} />
+              <a href={`mailto:${contact.email}`} class="transition-colors hover:text-text-primary">
+                {contact.email}
+              </a>
+            </li>
+            <li class="flex items-center gap-2">
+              <Icon name="pin" size={18} class={contactIcon} />
+              {contact.location}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-start gap-4 border-t border-border-subtle/10 pt-6 tablet:flex-row tablet:items-center tablet:justify-between">
+        <p class="text-body-small text-text-secondary">
+          © {new Date().getFullYear()} SEIKA Engenharia. Todos os direitos reservados.
+        </p>
+        {social.instagram && <SocialButton network="instagram" href={social.instagram} />}
+      </div>
+    </div>
+  </footer>
+</div>

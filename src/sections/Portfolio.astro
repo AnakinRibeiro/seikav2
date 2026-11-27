@@ -63,6 +63,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               src={photo.src}
               alt={photo.alt}
               formats={['avif', 'webp']}
+              quality="high"
               widths={[640, 960, 1280]}
               sizes="(min-width: 1024px) 854px, (min-width: 768px) 711px, 640px"
               class="absolute inset-0 size-full object-cover"

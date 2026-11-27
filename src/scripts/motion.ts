@@ -147,3 +147,28 @@ export function smoothAccordion(list: HTMLElement) {
     });
   }
 }
+
+/**
+ * Fade-up for a group of elements as they scroll into view, staggered among the ones that enter
+ * together (a row of cards, a list). Once per element.
+ */
+export function revealItems(
+  items: HTMLElement[],
+  { y = 30, stagger = 0.1, delay = 0, start = 'top 88%' } = {},
+) {
+  gsap.set(items, { autoAlpha: 0, y });
+  ScrollTrigger.batch(items, {
+    start,
+    once: true,
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+        stagger,
+        delay,
+        clearProps: 'transform',
+      }),
+  });
+}

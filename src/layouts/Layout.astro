@@ -18,6 +18,12 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
+    <!-- `anim` turns on the initial state of the entrance animations; skipped for reduced motion. -->
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('anim');
+      }
+    </script>
   </head>
   <body>
     <slot />

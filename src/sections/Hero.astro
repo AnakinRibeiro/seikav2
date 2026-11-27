@@ -3,6 +3,10 @@
  * Hero (Figma: "Hero — foto full-bleed + card de avaliação em vidro").
  * Desktop 860px de altura, texto e card lado a lado; tablet 1024px, empilhado;
  * mobile com altura do conteúdo e botões em largura total.
+ * Entrada animada (GSAP, script no fim): a foto se revela de baixo para cima, o título sobe linha
+ * por linha de trás de uma máscara, o resto aparece quase junto e, por último, o card e seus itens.
+ * Os atributos `data-hero*` marcam o que anima; sem JavaScript ou com `prefers-reduced-motion`
+ * (classe `anim` ausente em <html>) nada fica escondido.
  */
 import { Picture } from 'astro:assets';
 import heroImage from '../assets/images/hero.png';
@@ -18,7 +22,7 @@ import { whatsapp } from '../config/site';
   id="inicio"
   class="relative isolate flex flex-col items-center gap-20 pt-6 pb-10 tablet:min-h-256 tablet:justify-between tablet:pb-12 desktop:min-h-215 desktop:gap-0 desktop:pb-16"
 >
-  <div aria-hidden="true" class="absolute inset-0 -z-10">
+  <div aria-hidden="true" data-hero-bg class="absolute inset-0 -z-10">
     <Picture
       src={heroImage}
       alt=""
@@ -33,31 +37,47 @@ import { whatsapp } from '../config/site';
     <div class="hero-overlay absolute inset-0"></div>
   </div>
 
-  <SiteNav />
+  <div data-hero class="w-full">
+    <SiteNav />
+  </div>
 
   <div class="container-page flex flex-col gap-8 tablet:gap-10 desktop:flex-row desktop:items-end desktop:justify-between">
     <div class="flex flex-col gap-8 desktop:w-164">
       <div class="flex flex-col gap-6">
         <div class="flex flex-col items-start gap-4">
-          <Badge
-            text="Responsável técnico: Eng. Adriano J. Gorges · CREA-PR 206130/D"
-            icon="shield"
-          />
-          <h1 class="text-h4 text-text-inverse-emphasis tablet:text-h3 desktop:text-h1">
-            <!-- Line breaks follow Figma: "…elétrica / e energia solar" from tablet up, "…elétrica e / energia solar" on mobile. -->
-            Engenharia elétrica
-            <br class="hidden tablet:inline" />
-            {' e '}
-            <br class="tablet:hidden" />
-            <span class="text-(--primitive-yellow-500)">energia solar</span>
+          <div data-hero>
+            <Badge
+              text="Responsável técnico: Eng. Adriano J. Gorges · CREA-PR 206130/D"
+              icon="shield"
+            />
+          </div>
+          <h1
+            data-hero-title
+            class="text-h4 text-text-inverse-emphasis tablet:text-h3 desktop:text-h1"
+          >
+            {/* Lines are explicit spans (masks for the intro): "…elétrica / e energia solar" from tablet up, "…elétrica e / energia solar" on mobile. */}
+            <span class="-mb-[0.1em] block overflow-clip pb-[0.1em]">
+              <span data-hero-line class="block">
+                Engenharia elétrica<span class="tablet:hidden">{' e'}</span>
+              </span>
+            </span>{' '}
+            <span class="-mb-[0.1em] block overflow-clip pb-[0.1em]">
+              <span data-hero-line class="block">
+                <span class="hidden tablet:inline">{'e '}</span>
+                <span class="text-(--primitive-yellow-500)">energia solar</span>
+              </span>
+            </span>
           </h1>
         </div>
-        <p class="text-body-base text-text-inverse/85 tablet:text-body-large-regular desktop:w-130">
+        <p
+          data-hero
+          class="text-body-base text-text-inverse/85 tablet:text-body-large-regular desktop:w-130"
+        >
           Soluções completas em engenharia elétrica e energia solar para residências e empresas.
         </p>
       </div>
 
-      <div class="flex flex-col gap-3 tablet:flex-row">
+      <div data-hero class="flex flex-col gap-3 tablet:flex-row">
         <Button
           text="Simular minha economia"
           href={whatsapp.url}
@@ -75,15 +95,23 @@ import { whatsapp } from '../config/site';
       </div>
     </div>
 
-    <figure class="flex flex-col gap-4 rounded-container bg-bg-inverse/40 p-6 inset-ring inset-ring-border-inverse/20 backdrop-blur-[7px] desktop:w-92">
-      <Rating size="P" />
-      <blockquote class="text-body-base-medium text-text-inverse">
+    <figure
+      data-hero-card
+      class="flex flex-col gap-4 rounded-container bg-bg-inverse/40 p-6 inset-ring inset-ring-border-inverse/20 backdrop-blur-[7px] desktop:w-92"
+    >
+      <div data-hero-item>
+        <Rating size="P" />
+      </div>
+      <blockquote data-hero-item class="text-body-base-medium text-text-inverse">
         <p>
           “Precisávamos de previsibilidade de custo. Fizeram o estudo, cuidaram da homologação e
           ainda ajustaram o cronograma para não parar a produção.”
         </p>
       </blockquote>
-      <figcaption class="flex flex-col gap-2 tablet:flex-row tablet:items-center tablet:justify-between">
+      <figcaption
+        data-hero-item
+        class="flex flex-col gap-2 tablet:flex-row tablet:items-center tablet:justify-between"
+      >
         <span class="text-body-small text-text-inverse/75">Marcos · Cliente comercial</span>
         <a
           href="#depoimentos"
@@ -98,6 +126,31 @@ import { whatsapp } from '../config/site';
 </section>
 
 <style>
+  /*
+   * Initial state of the intro, only while `anim` is on <html> (set in Layout when motion is allowed).
+   * Fail-safe: if the script never runs, everything shows after 3s.
+   */
+  :global(.anim) [data-hero],
+  :global(.anim) [data-hero-title],
+  :global(.anim) [data-hero-card] {
+    visibility: hidden;
+    animation: hero-show 0s 3s forwards;
+  }
+  :global(.anim) [data-hero-bg] {
+    clip-path: inset(100% 0 0 0);
+    animation: hero-bg-show 0s 3s forwards;
+  }
+  @keyframes hero-show {
+    to {
+      visibility: visible;
+    }
+  }
+  @keyframes hero-bg-show {
+    to {
+      clip-path: inset(0);
+    }
+  }
+
   /* Figma overlay: navy at 67% → 0% → 15% → 98%, top to bottom. */
   .hero-overlay {
     background: linear-gradient(
@@ -109,3 +162,81 @@ import { whatsapp } from '../config/site';
     );
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const root = document.documentElement;
+  const hero = document.querySelector<HTMLElement>('#inicio');
+
+  if (hero && root.classList.contains('anim')) {
+    const q = (selector: string) => hero.querySelectorAll<HTMLElement>(selector);
+    const bg = hero.querySelector<HTMLElement>('[data-hero-bg]')!;
+    const title = hero.querySelector<HTMLElement>('[data-hero-title]')!;
+    const items = q('[data-hero]');
+    const card = hero.querySelector<HTMLElement>('[data-hero-card]')!;
+    const cardItems = q('[data-hero-item]');
+
+    gsap.set(cardItems, { autoAlpha: 0, y: 14 });
+
+    const play = () => {
+      // Photo opens from the bottom up while it settles from a slight zoom.
+      gsap.to(bg, {
+        clipPath: 'inset(0% 0 0 0)',
+        duration: 0.9,
+        ease: 'power3.out',
+      });
+      gsap.fromTo(
+        bg.querySelector('img'),
+        { scale: 1.12 },
+        { scale: 1, duration: 1.8, ease: 'power2.out', clearProps: 'transform' },
+      );
+
+      // Title rises line by line from behind a mask (the lines are overflow-clip wrappers).
+      gsap.set(title, { autoAlpha: 1 });
+      gsap.fromTo(
+        q('[data-hero-line]'),
+        { yPercent: 110 },
+        { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.12, delay: 0.15 },
+      );
+
+      // Menu, badge, text and buttons arrive almost together.
+      gsap.fromTo(
+        items,
+        { autoAlpha: 0, y: 18 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          delay: 0.3,
+          clearProps: 'transform',
+        },
+      );
+
+      // Glass card last, then its content in sequence.
+      gsap
+        .timeline({ delay: 0.8 })
+        .fromTo(
+          card,
+          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', clearProps: 'transform' },
+        )
+        .to(
+          cardItems,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            stagger: 0.12,
+            clearProps: 'transform',
+          },
+          '-=0.45',
+        );
+    };
+
+    play();
+  }
+</script>

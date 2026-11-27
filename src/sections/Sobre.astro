@@ -25,14 +25,16 @@ const audience = [
 <section id="sobre" class="py-section-y">
   <div class="container-page flex flex-col gap-10 tablet:gap-12 desktop:flex-row desktop:items-center desktop:justify-between">
     <div class="flex flex-col gap-8 desktop:w-140">
-      <div class="flex flex-col gap-5">
+      <div data-reveal-header class="flex flex-col gap-5">
         <div class="flex flex-col gap-3">
-          <SectionTag text="Quem somos" icon="award" />
-          <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+          <div data-reveal>
+            <SectionTag text="Quem somos" icon="award" />
+          </div>
+          <h2 data-reveal-title class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
             Uma empresa de engenharia, não uma revenda de painéis
           </h2>
         </div>
-        <p class="text-body-base text-text-secondary">
+        <p data-reveal class="text-body-base text-text-secondary">
           A SEIKA Engenharia atua em projetos elétricos e sistemas fotovoltaicos sob
           responsabilidade técnica do engenheiro{' '}
           <strong>Adriano José Gorges (CREA-PR 206130/D)</strong>. Cada projeto é dimensionado a
@@ -42,7 +44,9 @@ const audience = [
       </div>
 
       <div class="flex flex-col gap-4 border-t border-(color:--primitive-navy-100) pt-6">
-        <h3 class="text-body-base-semibold text-text-primary">Atendemos</h3>
+        <h3 data-reveal-item class="text-body-base-semibold text-text-primary">
+          Atendemos
+        </h3>
         <ul class="grid gap-3 tablet:grid-cols-2 tablet:gap-x-4">
           {audience.map((text) => (
             <ListItem text={text} />
@@ -50,13 +54,14 @@ const audience = [
         </ul>
       </div>
 
-      <Button
-        text="Simular minha economia"
-        href={whatsapp.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="self-start"
-      />
+      <div data-reveal-item class="self-start">
+        <Button
+          text="Simular minha economia"
+          href={whatsapp.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
     </div>
 
     <div class="relative flex h-90 flex-col items-start justify-end overflow-hidden rounded-container p-4 tablet:h-120 tablet:p-6 desktop:h-auto desktop:w-116 desktop:shrink-0 desktop:self-stretch">
@@ -78,3 +83,17 @@ const audience = [
     </div>
   </div>
 </section>
+
+<script>
+  import { motionAllowed, revealHeader, revealItems } from '../scripts/motion';
+
+  const root = document.querySelector<HTMLElement>('#sobre');
+
+  if (root && motionAllowed()) {
+    revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
+
+    // "Atendemos", its items and the button: fade up in sequence, after the title has started.
+    const items = [...root.querySelectorAll<HTMLElement>('[data-reveal-item], ul > li')];
+    revealItems(items, { y: 18, stagger: 0.06, delay: 0.45, start: 'top 90%' });
+  }
+</script>

@@ -115,7 +115,7 @@ const benefits = [
 </section>
 
 <script>
-  import { gsap, motionAllowed, revealHeader, ScrollTrigger } from '../scripts/motion';
+  import { motionAllowed, revealHeader, revealItems } from '../scripts/motion';
 
   const root = document.querySelector<HTMLElement>('#energia-solar');
 
@@ -126,19 +126,6 @@ const benefits = [
     const bento = root.querySelector<HTMLElement>('[data-reveal-bento]')!;
     const cards = [...bento.children].flatMap((row) => [...row.children]) as HTMLElement[];
 
-    gsap.set(cards, { autoAlpha: 0, y: 30 });
-    ScrollTrigger.batch(cards, {
-      start: 'top 88%',
-      once: true,
-      onEnter: (batch) =>
-        gsap.to(batch, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          stagger: 0.1,
-          clearProps: 'transform',
-        }),
-    });
+    revealItems(cards);
   }
 </script>

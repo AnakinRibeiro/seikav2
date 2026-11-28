@@ -107,7 +107,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </style>
 
 <script>
-  import { gsap, motionAllowed, revealHeader } from '../scripts/motion';
+  import { gsap, motionAllowed, revealHeader, revealWhenVisible } from '../scripts/motion';
 
   const gallery = document.querySelector<HTMLElement>('#portfolio-galeria');
 
@@ -203,6 +203,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
     gallery.addEventListener('scroll', update, { passive: true });
     update();
 
-    if (animated) revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
+    if (animated) {
+      revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
+      // Photos fade up one after another as they come into view, also as the strip is scrolled.
+      revealWhenVisible(items);
+    }
   }
 </script>

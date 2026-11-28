@@ -55,28 +55,31 @@ const questions = [
 
 <section id="faq" class="bg-bg-subtle py-section-y">
   <div class="container-page flex flex-col gap-10 tablet:gap-12 desktop:flex-row desktop:gap-0 desktop:items-start desktop:justify-between">
-    <div class="flex flex-col gap-5 desktop:w-116 desktop:shrink-0">
+    <div data-reveal-header class="flex flex-col gap-5 desktop:w-116 desktop:shrink-0">
       <div class="flex flex-col gap-3">
-        <SectionTag text="FAQ" icon="help" />
-        <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+        <div data-reveal>
+          <SectionTag text="FAQ" icon="help" />
+        </div>
+        <h2 data-reveal-title class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
           Perguntas frequentes
         </h2>
       </div>
-      <div class="text-body-base text-text-secondary">
+      <div data-reveal class="text-body-base text-text-secondary">
         <p>Não encontrou a sua dúvida?</p>
         <p>Fale direto com a nossa equipe pelo WhatsApp.</p>
       </div>
-      <Button
-        text="Perguntar no WhatsApp"
-        icon="chat"
-        href={whatsapp.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="self-start"
-      />
+      <div data-reveal class="self-start">
+        <Button
+          text="Perguntar no WhatsApp"
+          icon="chat"
+          href={whatsapp.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
     </div>
 
-    <div class="desktop:w-164">
+    <div data-smooth-accordion class="desktop:w-164">
       {questions.map((question, i) => (
         <Accordion
           theme="light"
@@ -95,3 +98,14 @@ const questions = [
     </div>
   </div>
 </section>
+
+<script>
+  import { motionAllowed, revealHeader, smoothAccordion } from '../scripts/motion';
+
+  const root = document.querySelector<HTMLElement>('#faq');
+
+  if (root && motionAllowed()) {
+    revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
+    smoothAccordion(root.querySelector<HTMLElement>('[data-smooth-accordion]')!);
+  }
+</script>

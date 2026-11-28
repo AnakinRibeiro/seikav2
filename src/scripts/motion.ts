@@ -98,43 +98,30 @@ export function smoothAccordion(list: HTMLElement) {
   const contentOf = (item: HTMLDetailsElement) => item.lastElementChild as HTMLElement;
   const done = () => ScrollTrigger.refresh();
 
-  const open = (item: HTMLDetailsElement) => {
+  // Tweens the content block between its current state and open (natural) / closed (0). The
+  // current state is read from the rendered element, so interrupting a move continues from where
+  // it was. The margin is tweened too: closed items must not keep it (it would add a gap).
+  const move = (item: HTMLDetailsElement, opening: boolean) => {
     const content = contentOf(item);
-    const fromHeight = item.open ? content.offsetHeight : 0;
-    const fromAlpha = item.open || fromHeight ? Number(gsap.getProperty(content, 'opacity')) : 0;
+    const height = content.offsetHeight;
+    const from = {
+      height,
+      marginTop: parseFloat(getComputedStyle(content).marginTop),
+      autoAlpha: height ? Number(gsap.getProperty(content, 'opacity')) : 0,
+    };
     gsap.killTweensOf(content);
-    item.open = true;
-    gsap.fromTo(
-      content,
-      { height: fromHeight, autoAlpha: fromAlpha },
-      {
-        height: 'auto',
-        autoAlpha: 1,
-        duration: 0.5,
-        ease: 'power2.inOut',
-        clearProps: 'all',
-        onComplete: done,
-      },
-    );
-  };
-
-  const close = (item: HTMLDetailsElement) => {
-    const content = contentOf(item);
-    const fromHeight = content.offsetHeight;
-    gsap.killTweensOf(content);
-    item.open = false;
-    gsap.fromTo(
-      content,
-      { height: fromHeight, autoAlpha: Number(gsap.getProperty(content, 'opacity')) },
-      {
-        height: 0,
-        autoAlpha: 0,
-        duration: 0.5,
-        ease: 'power2.inOut',
-        clearProps: 'all',
-        onComplete: done,
-      },
-    );
+    item.open = opening;
+    gsap.set(content, { clearProps: 'all' });
+    const to = opening
+      ? { height: 'auto', marginTop: parseFloat(getComputedStyle(content).marginTop), autoAlpha: 1 }
+      : { height: 0, marginTop: 0, autoAlpha: 0 };
+    gsap.fromTo(content, from, {
+      ...to,
+      duration: 0.5,
+      ease: 'power2.inOut',
+      clearProps: 'all',
+      onComplete: done,
+    });
   };
 
   for (const item of items) {
@@ -143,9 +130,9 @@ export function smoothAccordion(list: HTMLElement) {
     item.dataset.smooth = '';
     item.querySelector('summary')?.addEventListener('click', (event) => {
       event.preventDefault();
-      if (item.open) return close(item);
-      items.filter((other) => other !== item && other.open).forEach(close);
-      open(item);
+      if (item.open) return move(item, false);
+      items.filter((other) => other !== item && other.open).forEach((other) => move(other, false));
+      move(item, true);
     });
   }
 }

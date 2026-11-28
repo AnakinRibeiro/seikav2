@@ -174,3 +174,31 @@ export function revealItems(
       }),
   });
 }
+
+/**
+ * Like `revealItems`, but for items that can be hidden horizontally (a carousel strip): each one
+ * fades up when it actually becomes visible on screen, whether by scrolling the page or the strip.
+ * Items that appear together are staggered in DOM order. Once per item.
+ */
+export function revealWhenVisible(items: HTMLElement[], { y = 30, stagger = 0.1 } = {}) {
+  gsap.set(items, { autoAlpha: 0, y });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const shown = entries
+        .filter((entry) => entry.isIntersecting)
+        .map((entry) => entry.target as HTMLElement)
+        .sort((a, b) => items.indexOf(a) - items.indexOf(b));
+      shown.forEach((item) => observer.unobserve(item));
+      gsap.to(shown, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+        stagger,
+        clearProps: 'transform',
+      });
+    },
+    { threshold: 0.2 },
+  );
+  items.forEach((item) => observer.observe(item));
+}

@@ -61,11 +61,12 @@ export function revealHeader(header: HTMLElement) {
     start: 'top 80%',
     once: true,
     onEnter: () => {
-      gsap
+      const tl = gsap
         .timeline()
         .to(tag, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', clearProps: 'transform' })
-        .to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1)
-        .to(
+        .to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1);
+      if (rest.length) {
+        tl.to(
           rest,
           {
             autoAlpha: 1,
@@ -77,6 +78,7 @@ export function revealHeader(header: HTMLElement) {
           },
           0.5,
         );
+      }
     },
   });
 }

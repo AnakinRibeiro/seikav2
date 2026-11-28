@@ -38,10 +38,15 @@ const initial = 1;
 
 <section id="depoimentos" class="bg-bg-warm py-section-y">
   <div class="container-page flex flex-col gap-section-gap">
-    <header class="flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between">
+    <header
+      data-reveal-header
+      class="flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between"
+    >
       <div class="flex flex-col gap-3">
-        <SectionTag text="Depoimentos" icon="star" />
-        <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+        <div data-reveal>
+          <SectionTag text="Depoimentos" icon="star" />
+        </div>
+        <h2 data-reveal-title class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
           O que nossos clientes dizem
         </h2>
       </div>
@@ -92,15 +97,59 @@ const initial = 1;
 </section>
 
 <script>
+  import { gsap, motionAllowed, revealHeader } from '../scripts/motion';
+
+  // The featured testimonial changes by itself every 6 seconds.
+  const AUTOPLAY_MS = 6000;
+
   const root = document.querySelector<HTMLElement>('#depoimentos');
 
   if (root) {
+    const animated = motionAllowed();
     const tabs = [...root.querySelectorAll<HTMLElement>('[role="tab"]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
     const counter = root.querySelector<HTMLElement>('[data-counter]');
     let current = tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
 
+    // Crossfade: the old panel leaves upward while the new one rises in. Both stay visible during
+    // the tween through inline styles, then the data-active classes take over again.
+    const swap = (from: HTMLElement, to: HTMLElement) => {
+      for (const panel of panels) {
+        if (panel === from || panel === to) continue;
+        gsap.killTweensOf(panel);
+        gsap.set(panel, { clearProps: 'visibility,opacity,transform' });
+      }
+      const fromAlpha = Number(gsap.getProperty(from, 'opacity'));
+      const toAlpha =
+        to.style.visibility === 'visible' ? Number(gsap.getProperty(to, 'opacity')) : 0;
+      gsap.killTweensOf([from, to]);
+      gsap.fromTo(
+        from,
+        { autoAlpha: fromAlpha },
+        {
+          autoAlpha: 0,
+          y: -14,
+          duration: 0.4,
+          ease: 'power2.in',
+          clearProps: 'visibility,opacity,transform',
+        },
+      );
+      gsap.fromTo(
+        to,
+        { autoAlpha: toAlpha, y: 16 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.6,
+          delay: 0.2,
+          ease: 'power3.out',
+          clearProps: 'visibility,opacity,transform',
+        },
+      );
+    };
+
     const show = (index: number, focus = false) => {
+      const previous = current;
       current = (index + tabs.length) % tabs.length;
       tabs.forEach((tab, i) => {
         tab.setAttribute('aria-selected', String(i === current));
@@ -109,7 +158,52 @@ const initial = 1;
       panels.forEach((panel, i) => panel.toggleAttribute('data-active', i === current));
       if (counter) counter.textContent = `${current + 1} / ${tabs.length}`;
       if (focus) tabs[current]?.focus();
+      if (animated && previous !== current) swap(panels[previous], panels[current]);
+      arm();
     };
+
+    // Autoplay: only while the section is on screen, the tab is visible and the visitor is not
+    // hovering or keyboard-focused inside it. Any change restarts the full interval.
+    let inView = false;
+    let hovering = false;
+    let focused = false;
+    const timer = animated
+      ? gsap.delayedCall(AUTOPLAY_MS / 1000, () => show(current + 1)).pause()
+      : null;
+    const arm = () => {
+      if (!timer) return;
+      if (inView && !hovering && !focused && !document.hidden) timer.restart(true);
+      else timer.pause();
+    };
+
+    if (animated) {
+      new IntersectionObserver(
+        ([entry]) => {
+          inView = entry.isIntersecting;
+          arm();
+        },
+        { threshold: 0.4 },
+      ).observe(root);
+      document.addEventListener('visibilitychange', arm);
+      root.addEventListener('pointerenter', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        hovering = true;
+        arm();
+      });
+      root.addEventListener('pointerleave', () => {
+        hovering = false;
+        arm();
+      });
+      root.addEventListener('focusin', (e) => {
+        focused = (e.target as HTMLElement).matches(':focus-visible');
+        arm();
+      });
+      root.addEventListener('focusout', () => {
+        focused = false;
+        arm();
+      });
+      revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
+    }
 
     tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i)));
     root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => show(current - 1));

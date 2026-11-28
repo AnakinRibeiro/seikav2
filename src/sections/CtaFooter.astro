@@ -42,21 +42,30 @@ const contactIcon = 'shrink-0 text-(--primitive-navy-600)';
     <div class="absolute inset-0 bg-linear-to-b from-bg-inverse/92 via-bg-inverse/55 via-55% to-bg-inverse/25"></div>
   </div>
 
-  <section class="container-page flex flex-col items-center gap-5 text-center desktop:max-w-188">
-    <h2 class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:text-h2">
+  <section
+    data-cta
+    data-reveal-header
+    class="container-page flex flex-col items-center gap-5 text-center desktop:max-w-188"
+  >
+    <h2 data-reveal-title class="text-h5 text-text-inverse-emphasis tablet:text-h4 desktop:text-h2">
       Comece pelo mais simples: mande a sua <span class="text-action-primary">conta de luz.</span>
     </h2>
-    <p class="text-body-base text-text-inverse/85 tablet:max-w-155 tablet:text-body-large-regular">
+    <p
+      data-reveal
+      class="text-body-base text-text-inverse/85 tablet:max-w-155 tablet:text-body-large-regular"
+    >
       Uma foto da fatura pelo WhatsApp já é o suficiente para sabermos quanto você pode economizar.
       Sem compromisso, sem custo.
     </p>
-    <Button
-      text="Enviar no WhatsApp"
-      icon="chat"
-      href={whatsapp.url}
-      target="_blank"
-      rel="noopener noreferrer"
-    />
+    <div data-reveal>
+      <Button
+        text="Enviar no WhatsApp"
+        icon="chat"
+        href={whatsapp.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    </div>
   </section>
 
   <footer class="mx-2 rounded-page bg-bg-page pt-10 pb-6 tablet:mx-4 tablet:pt-12 tablet:pb-8 desktop:pt-16">
@@ -139,3 +148,10 @@ const contactIcon = 'shrink-0 text-(--primitive-navy-600)';
     </div>
   </footer>
 </div>
+
+<script>
+  import { motionAllowed, revealHeader } from '../scripts/motion';
+
+  const cta = document.querySelector<HTMLElement>('[data-cta]');
+  if (cta && motionAllowed()) revealHeader(cta, { tag: false });
+</script>

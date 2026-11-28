@@ -49,22 +49,32 @@ export function splitWords(el: HTMLElement) {
  * Section header entrance, shared by the sections: the tag fades up, the title words rise from
  * behind their masks, then the remaining `[data-reveal]` items (button, text) follow almost
  * together. Marked with `data-reveal` (tag first), `data-reveal-title` and played once when the
- * header reaches 80% of the viewport.
+ * header reaches 80% of the viewport. Pass `{ tag: false }` for a block without a tag.
  */
-export function revealHeader(header: HTMLElement) {
-  const [tag, ...rest] = header.querySelectorAll<HTMLElement>('[data-reveal]');
+export function revealHeader(header: HTMLElement, { tag: hasTag = true } = {}) {
+  const items = [...header.querySelectorAll<HTMLElement>('[data-reveal]')];
+  // With a tag it is the first `[data-reveal]`; without one (a CTA) everything follows the title.
+  const tag = hasTag ? items.shift() : undefined;
+  const rest = items;
   const words = splitWords(header.querySelector<HTMLElement>('[data-reveal-title]')!);
 
-  gsap.set([tag, ...rest], { autoAlpha: 0, y: 18 });
+  gsap.set([...(tag ? [tag] : []), ...rest], { autoAlpha: 0, y: 18 });
   ScrollTrigger.create({
     trigger: header,
     start: 'top 80%',
     once: true,
     onEnter: () => {
-      const tl = gsap
-        .timeline()
-        .to(tag, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', clearProps: 'transform' })
-        .to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1);
+      const tl = gsap.timeline();
+      if (tag) {
+        tl.to(tag, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          clearProps: 'transform',
+        });
+      }
+      tl.to(words, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 }, 0.1);
       if (rest.length) {
         tl.to(
           rest,

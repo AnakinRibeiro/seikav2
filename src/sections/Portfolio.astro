@@ -32,10 +32,15 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 <section id="portfolio" class="py-section-y">
   <div class="flex flex-col gap-section-gap">
-    <header class="container-page flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between">
+    <header
+      data-reveal-header
+      class="container-page flex flex-col gap-6 tablet:flex-row tablet:items-end tablet:justify-between"
+    >
       <div class="flex flex-col gap-3">
-        <SectionTag text="Portfólio" icon="image" />
-        <h2 class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
+        <div data-reveal>
+          <SectionTag text="Portfólio" icon="image" />
+        </div>
+        <h2 data-reveal-title class="text-h5 text-text-primary tablet:text-h4 desktop:text-h2">
           Alguns dos serviços que realizamos
         </h2>
       </div>
@@ -54,10 +59,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <ul class="flex w-max gap-4">
         {photos.map((photo, i) => (
           <li
-            class:list={[
-              'relative h-90 shrink-0 snap-start overflow-hidden rounded-container tablet:h-100 desktop:h-120',
-              i === 0 ? 'w-75 tablet:w-110 desktop:w-140' : 'w-60 tablet:w-75 desktop:w-92',
-            ]}
+            data-focus={i === 0 ? '' : undefined}
+            class="relative h-90 w-60 shrink-0 snap-start overflow-hidden rounded-container tablet:h-100 tablet:w-75 desktop:h-120 desktop:w-92 data-focus:w-75 tablet:data-focus:w-110 desktop:data-focus:w-140"
           >
             <Picture
               src={photo.src}
@@ -95,6 +98,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
     padding-left: var(--gallery-gutter);
     scroll-padding-left: var(--gallery-gutter);
     scrollbar-width: none;
+    /* The photos change width on "next"/"previous"; the scroll position is driven by the script. */
+    overflow-anchor: none;
   }
   .gallery::-webkit-scrollbar {
     display: none;
@@ -102,21 +107,85 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </style>
 
 <script>
+  import { gsap, motionAllowed, revealHeader } from '../scripts/motion';
+
   const gallery = document.querySelector<HTMLElement>('#portfolio-galeria');
 
   if (gallery) {
     const root = gallery.closest('section')!;
     const items = [...gallery.querySelectorAll<HTMLElement>('li')];
     const indicator = root.querySelector<HTMLElement>('[data-progress]');
-    // Snap position of each photo: its offset from the first one (the gutter cancels out).
-    const stops = items.map((item) => item.offsetLeft - items[0].offsetLeft);
+    const animated = motionAllowed();
     const maxScroll = () => gallery.scrollWidth - gallery.clientWidth;
+    // Snap position of a photo: its offset from the first one (the gutter cancels out).
+    const stop = (item: HTMLElement) => item.offsetLeft - items[0].offsetLeft;
 
-    const go = (left: number) =>
-      gallery.scrollTo({
-        left,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    // The photo in focus (`data-focus`) is the wide one; the others share the narrow width.
+    let focus = 0;
+    let running: gsap.core.Timeline | null = null;
+
+    const nearest = () =>
+      items.reduce(
+        (best, item, i) =>
+          Math.abs(stop(item) - gallery.scrollLeft) <
+          Math.abs(stop(items[best]) - gallery.scrollLeft)
+            ? i
+            : best,
+        0,
+      );
+    // Where the user is now: the focused photo if the gallery is parked on it, else the nearest one.
+    const current = () => {
+      if (running?.isActive()) return focus;
+      const parked = Math.min(stop(items[focus]), maxScroll());
+      return Math.abs(parked - gallery.scrollLeft) < 4 ? focus : nearest();
+    };
+
+    // Moves the focus: the old photo shrinks to the narrow width while the new one grows to the wide
+    // width, and the gallery scrolls so the new photo sits at the left edge. Widths are measured
+    // before/after the switch (FLIP), so an interrupted move continues from where it was.
+    const focusOn = (index: number) => {
+      const target = (index + items.length) % items.length;
+      const startScroll = gallery.scrollLeft;
+      const before = items.map((item) => item.getBoundingClientRect().width);
+
+      running?.kill();
+      gsap.set(items, { clearProps: 'width' });
+      items[focus].removeAttribute('data-focus');
+      items[target].setAttribute('data-focus', '');
+      focus = target;
+      const after = items.map((item) => item.getBoundingClientRect().width);
+      const end = Math.min(stop(items[target]), maxScroll());
+
+      if (!animated) {
+        gallery.scrollTo({ left: end, behavior: 'auto' });
+        return;
+      }
+
+      // Snap would fight the programmatic scroll; it is restored (and lands on `end`) at the end.
+      gallery.style.scrollSnapType = 'none';
+      const scroll = { left: startScroll };
+      gallery.scrollLeft = startScroll;
+      running = gsap.timeline({
+        defaults: { duration: 0.7, ease: 'power3.inOut' },
+        onComplete: () => {
+          gallery.style.scrollSnapType = '';
+        },
       });
+      items.forEach((item, i) => {
+        if (Math.abs(before[i] - after[i]) < 0.5) return;
+        running!.fromTo(item, { width: before[i] }, { width: after[i], clearProps: 'width' }, 0);
+      });
+      running.to(
+        scroll,
+        {
+          left: end,
+          onUpdate: () => {
+            gallery.scrollLeft = scroll.left;
+          },
+        },
+        0,
+      );
+    };
 
     const update = () => {
       if (!indicator) return;
@@ -125,15 +194,15 @@ const pad = (n: number) => String(n).padStart(2, '0');
       indicator.style.left = `${progress * (100 - 100 / items.length)}%`;
     };
 
-    root.querySelector('[data-carousel-next]')?.addEventListener('click', () => {
-      const next = stops.find((stop) => stop > gallery.scrollLeft + 1);
-      go(next === undefined || gallery.scrollLeft >= maxScroll() - 1 ? 0 : next);
-    });
-    root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => {
-      const prev = stops.findLast((stop) => stop < gallery.scrollLeft - 1);
-      go(prev === undefined ? maxScroll() : prev);
-    });
+    root
+      .querySelector('[data-carousel-next]')
+      ?.addEventListener('click', () => focusOn(current() + 1));
+    root
+      .querySelector('[data-carousel-prev]')
+      ?.addEventListener('click', () => focusOn(current() - 1));
     gallery.addEventListener('scroll', update, { passive: true });
     update();
+
+    if (animated) revealHeader(root.querySelector<HTMLElement>('[data-reveal-header]')!);
   }
 </script>
